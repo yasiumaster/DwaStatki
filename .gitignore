@@ -1,3 +1,5 @@
 ﻿.metadata
-DwaStatki/lib/*
-DwaStatkiClient/lib/*
+DwaStatki/lib/jars
+DwaStatki/lib/natives
+DwaStatkiClient/lib/jars
+DwaStatkiClient/lib/natives

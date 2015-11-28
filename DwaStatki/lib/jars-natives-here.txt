@@ -1,0 +1,7 @@
+jars/
+	kryonet-2.21-all
+	lwjgl
+	slick
+
+natives/
+	lwjgl natives
