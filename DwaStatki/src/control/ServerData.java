@@ -1,9 +1,11 @@
 package control;
 
-public class ServerData {
+public class ServerData implements ShipAction {
 
 	private int shipX;
 	private int shipY;
+	private int hp = 100;
+	private int points = 0;
 	private static ServerData serverData = null;
 	
 	private ServerData() {
@@ -17,6 +19,28 @@ public class ServerData {
 		}
 		
 		return serverData;
+	}
+	
+	@Override
+	public void shoot() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPoints() {
+		points++;
+	}
+
+	@Override
+	public void hurt() {
+		hp-=1;
 	}
 
 	public void incrementShipY(int i) {
@@ -42,6 +66,5 @@ public class ServerData {
 	public void setShipY(int shipY) {
 		this.shipY = shipY;
 	}
-	
 	
 }

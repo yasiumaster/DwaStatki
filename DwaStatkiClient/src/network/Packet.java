@@ -24,12 +24,14 @@ public class Packet {
 	public static class Data {
 
 		private int x,y;
+		private boolean newShoot;
 		public Data() {
 			// TODO Auto-generated constructor stub
 		}
-		public Data(int x, int y) {
+		public Data(int x, int y, boolean newShoot) {
 			this.x = x;
 			this.y = y;
+			this.newShoot = newShoot;
 		}
 		
 		public int getX() {
@@ -38,6 +40,10 @@ public class Packet {
 		
 		public int getY() {
 			return y;
+		}
+		
+		public boolean getNewShoot() {
+			return newShoot;
 		}
 	}
 }

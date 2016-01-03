@@ -1,5 +1,11 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import model.Bullet;
+import model.Rock;
 import network.GameServer;
 
 import org.newdawn.slick.*;
@@ -10,6 +16,8 @@ import control.ServerData;
 
 public class Play extends BasicGameState{
 	
+	int shooted = 0;
+	
 	Image serverShip, clientShip, bg, bullet; 
 	
 	float bgX = -200;
@@ -18,6 +26,8 @@ public class Play extends BasicGameState{
 	private GameServer gameServer;
 	private ClientData clientData;
 	private ServerData serverData;
+	
+	private List<Bullet> bullets = new ArrayList<Bullet>();
 	
 	public Play(int state, GameServer gameServer, ClientData clientData, ServerData serverData) {
 		this.gameServer = gameServer;
@@ -38,10 +48,20 @@ public class Play extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		gameServer.send(serverData);
 		g.drawImage(bg, bgX, bgY);
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
+		//targets
+		//generateRocks(g);
+		Rock rock = new Rock();
+		//g.drawImage(rock.getRock(), rock.getX(), rock.getY());
+		
+		chceckClientShoot();
+		renderShoots(g);
+		handleShoots();
+		
 		g.drawString("SERVER", 100, 10);
 		g.drawString("CLIENT POS:", 10, 120);
 		g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY(),10,150);
@@ -50,11 +70,40 @@ public class Play extends BasicGameState{
 		g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY(),400,80);
 		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
 	}
+	
+	public void newServerShoot() {
+		Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY());
+		bullets.add(b);
+	}
+	
+	public void chceckClientShoot() {
+		//TODO: czy to jest poprawnie?
+		if(clientData.getIfNewShootAndReset()) {
+			Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());
+			bullets.add(b);
+		}
+	}
+	
+	private void renderShoots(Graphics g) throws SlickException {	
+		for(Bullet b : bullets) {
+			g.drawImage(new Image("res/bullet.png"), b.getX(), b.getY());
+		}
+	}
+	
+	private void handleShoots() {
+		for(Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();) {
+			Bullet current = iterator.next();
+			current.incrementY(1);
+			if(current.getY() == 0) {
+				iterator.remove();
+			}
+		}
+	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g)
 			throws SlickException {
-		gameServer.send(serverData);
+		//gameServer.send(serverData);
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
@@ -84,9 +133,8 @@ public class Play extends BasicGameState{
 			serverShip.rotate(-1);
 		}
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
-			
-/*			newShooted = true;
-			shooted = true;*/
+			newServerShoot();
+			//serverData.shoot();
 			
 		}
 	}

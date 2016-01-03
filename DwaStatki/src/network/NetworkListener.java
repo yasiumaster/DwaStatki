@@ -28,11 +28,14 @@ public class NetworkListener extends Listener {
 	public void received(Connection connection, Object obj) {
 		//System.out.println("Reviced something...");
 		if(obj instanceof Packet.Data) {
-			System.out.println("CLIENT DATA");
+			//System.out.println("CLIENT DATA");
 			Packet.Data revicePacket = (Packet.Data) obj;
-			System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
+			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			clientData.setShipX(revicePacket.getX());
 			clientData.setShipY(revicePacket.getY());
+			if(revicePacket.getNewShoot()) {
+				clientData.shoot();
+			}
 		}
 	}
 

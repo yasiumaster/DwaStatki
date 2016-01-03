@@ -22,7 +22,7 @@ public class GameClient implements Sender{
 		/*int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
 		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
-		Packet.Data data = new Packet.Data(clientData.getShipX(), clientData.getShipY());
+		Packet.Data data = new Packet.Data(clientData.getShipX(), clientData.getShipY(), clientData.getIfNewShootAndReset());
 		client.sendTCP(data);
 		
 	}

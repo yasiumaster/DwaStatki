@@ -29,9 +29,9 @@ public class NetworkListener extends Listener {
 	@Override
 	public void received(Connection connection, Object obj) {
 		if(obj instanceof Packet.Data) {
-			System.out.println("SERVER DATA: ");
+			//System.out.println("SERVER DATA: ");
 			Packet.Data revicePacket = (Packet.Data) obj;
-			System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
+			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			serverData.setShipX(revicePacket.getX());
 			serverData.setShipY(revicePacket.getY());
 		}

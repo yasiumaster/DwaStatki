@@ -41,6 +41,7 @@ public class Play extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		gameClient.send(clientData);
 		g.drawImage(bg, bgX, bgY);
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
@@ -57,7 +58,7 @@ public class Play extends BasicGameState{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g)
 			throws SlickException {
-		gameClient.send(clientData);
+		//gameClient.send(clientData);
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
@@ -88,8 +89,7 @@ public class Play extends BasicGameState{
 		}
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			
-/*			newShooted = true;
-			shooted = true;*/
+			clientData.shoot();
 			
 		}
 	}
