@@ -2,6 +2,8 @@ package game;
 
 import java.util.List;
 
+import network.GameClient;
+
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
@@ -29,9 +31,11 @@ public class Play extends BasicGameState{
 	float bulletY = 0;
 	boolean shooted = false;
 	boolean newShooted = false;
-	public Play(int state) {
-		
+	public Play(int state, GameClient gameClient) {
+		this.gameClient = gameClient;
 	}
+	
+	private GameClient gameClient; 
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
@@ -65,6 +69,7 @@ public class Play extends BasicGameState{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g)
 			throws SlickException {
+		gameClient.send(gc);
 		Input input = gc.getInput();
 		bgY+=0.1;
 		if(bgY>0) {

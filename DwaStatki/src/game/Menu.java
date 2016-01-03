@@ -25,6 +25,7 @@ public class Menu extends BasicGameState{
 		arg2.fillRect(300, 180, 90, 25);
 		arg2.setColor(Color.white);
 		arg2.drawString("Start!", 320, 185);
+		arg2.drawString("SERVER", 100, 100);
 		
 		/*int ypos = Mouse.getY();
 		int xpos = Mouse.getX();

@@ -17,9 +17,16 @@ public class NetworkListener extends Listener {
 	}
 	
 	@Override
-	public void received(Connection arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		super.received(arg0, arg1);
+	public void received(Connection connection, Object obj) {
+		if(obj instanceof Packet.DefaultPacket) {
+			Packet.DefaultPacket revicePacket = (Packet.DefaultPacket) obj;
+			System.out.println(revicePacket.toString());
+		}
+		if(obj instanceof Packet.Data) {
+			System.out.println("SERVER DATA: ");
+			Packet.Data revicePacket = (Packet.Data) obj;
+			System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
+		}
 	}
 
 }

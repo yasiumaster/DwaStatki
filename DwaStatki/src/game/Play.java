@@ -2,6 +2,8 @@ package game;
 
 import java.util.List;
 
+import network.GameServer;
+
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
@@ -29,6 +31,11 @@ public class Play extends BasicGameState{
 	float bulletY = 0;
 	boolean shooted = false;
 	boolean newShooted = false;
+	public Play(int state, GameServer gameServer) {
+		this.gameServer = gameServer;
+	}
+	
+	private GameServer gameServer; 
 	public Play(int state) {
 		
 	}
@@ -45,6 +52,7 @@ public class Play extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		gameServer.send(gc);
 		g.drawImage(bg, bgX, bgY);
 		g.drawString("Use 'Q', 'E' and ARROWS to naviagate. SPACE to shoot.", 10, 50);
 		g.drawImage(ship, shipX, shipY);
@@ -65,6 +73,7 @@ public class Play extends BasicGameState{
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g)
 			throws SlickException {
+		gameServer.send(gc);
 		Input input = gc.getInput();
 		bgY+=0.1;
 		if(bgY>0) {
