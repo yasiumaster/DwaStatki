@@ -2,19 +2,22 @@ package network;
 
 import java.io.IOException;
 
-import org.newdawn.slick.GameContainer;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import control.ClientData;
+import control.ServerData;
+
 public class GameServer implements Sender{
 	
 	private Server server;
+	private NetworkListener listener;
 	
-	public GameServer() {
+	public GameServer(ClientData clientData) {
 		server = new Server();
-		server.addListener(new NetworkListener());
+		listener = new NetworkListener(clientData);
+		server.addListener(listener);
 		Log.set(Log.LEVEL_DEBUG);
 	}
 	
@@ -31,11 +34,13 @@ public class GameServer implements Sender{
 	}
 
 	@Override
-	public void send(GameContainer gc) {
-		int mouseX = gc.getInput().getMouseX();
+	public void send(ServerData serverData) {
+/*		int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
-		Packet.Data data = new Packet.Data(mouseX, mouseY);
+		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
+		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY());
 		server.sendToAllTCP(data);
+		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
 		
 	}
 	

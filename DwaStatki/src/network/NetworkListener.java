@@ -3,7 +3,16 @@ package network;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import control.ClientData;
+
 public class NetworkListener extends Listener {
+	
+	private ClientData clientData;
+	
+	public NetworkListener(ClientData clientData) {
+		this.clientData = clientData;
+	}
+	
 	@Override
 	public void connected(Connection arg0) {
 		System.out.println("Someone connected!");
@@ -17,18 +26,13 @@ public class NetworkListener extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object obj) {
-		System.out.println("Reviced something...");
-		if(obj instanceof Packet.DefaultPacket) {
-			Packet.DefaultPacket revicePacket = (Packet.DefaultPacket) obj;
-			System.out.println(revicePacket.toString());
-			
-			Packet.DefaultPacket responsePacket = new Packet.DefaultPacket("Odpowiadam");
-			connection.sendTCP(responsePacket);
-		}
+		//System.out.println("Reviced something...");
 		if(obj instanceof Packet.Data) {
 			System.out.println("CLIENT DATA");
 			Packet.Data revicePacket = (Packet.Data) obj;
 			System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
+			clientData.setShipX(revicePacket.getX());
+			clientData.setShipY(revicePacket.getY());
 		}
 	}
 

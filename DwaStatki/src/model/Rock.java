@@ -1,4 +1,4 @@
-package enemies;
+package model;
 
 public class Rock {
 

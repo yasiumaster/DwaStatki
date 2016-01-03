@@ -1,28 +1,28 @@
 package network;
 
-import java.io.IOException;
-
-import org.newdawn.slick.GameContainer;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
+
+import control.ClientData;
+import control.ServerData;
 
 public class GameClient implements Sender{
 	
 	private Client client;
 	
-	public GameClient() {
+	public GameClient(ServerData serverData) {
 		client = new Client();
-		client.addListener(new NetworkListener());
+		client.addListener(new NetworkListener(serverData));
 		Log.set(Log.LEVEL_DEBUG);
 	}
 	
 	@Override
-	public void send(GameContainer gc) {
-		int mouseX = gc.getInput().getMouseX();
+	public void send(ClientData clientData) {
+		/*int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
-		Packet.Data data = new Packet.Data(mouseX, mouseY);
+		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
+		Packet.Data data = new Packet.Data(clientData.getShipX(), clientData.getShipY());
 		client.sendTCP(data);
 		
 	}

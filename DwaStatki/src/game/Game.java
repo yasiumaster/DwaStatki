@@ -8,6 +8,9 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.util.Log;
 
+import control.ClientData;
+import control.ServerData;
+
 public class Game extends StateBasedGame{
 
 	public static final String GAMENAME = "2dGame";
@@ -15,10 +18,10 @@ public class Game extends StateBasedGame{
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
 	
-	public Game(String name, GameServer gameServer) {
+	public Game(String name, GameServer gameServer, ClientData clientData, ServerData serverData) {
 		super(name);
 		this.addState(new Menu(MENU));
-		this.addState(new Play(PLAY, gameServer));
+		this.addState(new Play(PLAY, gameServer, clientData, serverData));
 	}
 
 	@Override
@@ -30,13 +33,15 @@ public class Game extends StateBasedGame{
 	
 	public static void main(String[] args) {
 		AppGameContainer gameContainer;
-		GameServer gameServer = new GameServer();
+		ClientData clientData = ClientData.createClientData(50, 150);
+		ServerData serverData = ServerData.createServerData(300, 150);
+		GameServer gameServer = new GameServer(clientData);
 		
 		try {
 			gameServer.start(PORT);
 			System.out.println("Server started");
 			
-			Game game = new Game(GAMENAME, gameServer); 
+			Game game = new Game(GAMENAME, gameServer, clientData, serverData); 
 			gameContainer = new AppGameContainer(game);
 			gameContainer.setDisplayMode(640, 360, false);
 			gameContainer.start();

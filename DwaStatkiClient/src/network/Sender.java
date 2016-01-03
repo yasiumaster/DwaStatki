@@ -1,8 +1,8 @@
 package network;
 
-import org.newdawn.slick.GameContainer;
+import control.ClientData;
 
 public interface Sender {
 
-	public void send(GameContainer gc);
+	public void send(ClientData clientData);
 }
