@@ -6,6 +6,7 @@ public class ServerData implements ShipAction {
 	private int shipY;
 	private int hp = 100;
 	private int points = 0;
+	private boolean newShoot = false;
 	private static ServerData serverData = null;
 	
 	private ServerData() {
@@ -21,9 +22,18 @@ public class ServerData implements ShipAction {
 		return serverData;
 	}
 	
+	public boolean getIfNewShootAndReset() {
+		if(newShoot) {
+			System.out.println("New shoot from server!");
+			newShoot = false;
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public void shoot() {
-		// TODO Auto-generated method stub
+		newShoot = true;
 		
 	}
 

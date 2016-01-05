@@ -34,6 +34,9 @@ public class NetworkListener extends Listener {
 			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			serverData.setShipX(revicePacket.getX());
 			serverData.setShipY(revicePacket.getY());
+			if(revicePacket.getNewShoot()) {
+				serverData.shoot();
+			}
 		}
 	}
 

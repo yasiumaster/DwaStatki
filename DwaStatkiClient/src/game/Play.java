@@ -1,7 +1,10 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import model.Bullet;
 import network.GameClient;
 
 import org.newdawn.slick.*;
@@ -20,6 +23,8 @@ public class Play extends BasicGameState{
 	private GameClient gameClient; 
 	private ClientData clientData;
 	private ServerData serverData;
+	
+	private List<Bullet> bullets = new ArrayList<Bullet>();
 	
 	public Play(int state, GameClient gameClient, ClientData clientData, ServerData serverData) {
 		this.serverData = serverData;
@@ -46,6 +51,10 @@ public class Play extends BasicGameState{
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
+		chceckServerShoot();
+		renderShoots(g);
+		handleShoots();
+		
 		g.drawString("CLIENT", 100, 10);
 		g.drawString("SERVER POS:", 10, 120);
 		g.drawString("X:"+serverData.getShipX() + "\nY:"+ serverData.getShipY(),10,150);
@@ -53,6 +62,35 @@ public class Play extends BasicGameState{
 		g.drawString("Use 'Q', 'E' and ARROWS to naviagate. SPACE to shoot.", 10, 50);
 		g.drawString("Statek X:"+clientData.getShipX() + "\nStatek Y:"+ clientData.getShipY(),400,80);
 		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
+	}
+	
+	public void newClientShoot() {
+		Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());
+		bullets.add(b);
+	}
+	
+	public void chceckServerShoot() {
+		//TODO: czy to jest poprawnie?
+		if(serverData.getIfNewShootAndReset()) {
+			Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY());
+			bullets.add(b);
+		}
+	}
+	
+	private void renderShoots(Graphics g) throws SlickException {	
+		for(Bullet b : bullets) {
+			g.drawImage(new Image("res/bullet.png"), b.getX(), b.getY());
+		}
+	}
+	
+	private void handleShoots() {
+		for(Iterator<Bullet> iterator = bullets.iterator(); iterator.hasNext();) {
+			Bullet current = iterator.next();
+			current.incrementY(1);
+			if(current.getY() == 0) {
+				iterator.remove();
+			}
+		}
 	}
 
 	@Override
@@ -88,7 +126,7 @@ public class Play extends BasicGameState{
 			clientShip.rotate(-1);
 		}
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
-			
+			newClientShoot();
 			clientData.shoot();
 			
 		}

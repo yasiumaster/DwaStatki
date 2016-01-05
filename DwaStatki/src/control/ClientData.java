@@ -24,6 +24,7 @@ public class ClientData implements ShipAction{
 	
 	public boolean getIfNewShootAndReset() {
 		if(newShoot) {
+			System.out.println("New shoot from client!");
 			newShoot = false;
 			return true;
 		}

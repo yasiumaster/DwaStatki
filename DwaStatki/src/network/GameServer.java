@@ -38,7 +38,7 @@ public class GameServer implements Sender{
 /*		int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
 		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
-		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), false);
+		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getIfNewShootAndReset());
 		server.sendToAllTCP(data);
 		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
 		

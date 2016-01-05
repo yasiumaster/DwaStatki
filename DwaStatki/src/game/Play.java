@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import model.Bullet;
 import model.Rock;
@@ -18,7 +19,7 @@ public class Play extends BasicGameState{
 	
 	int shooted = 0;
 	
-	Image serverShip, clientShip, bg, bullet; 
+	Image serverShip, clientShip, bg, bullet, rock; 
 	
 	float bgX = -200;
 	float bgY = -800;
@@ -28,6 +29,7 @@ public class Play extends BasicGameState{
 	private ServerData serverData;
 	
 	private List<Bullet> bullets = new ArrayList<Bullet>();
+	private List<Rock> rocks = new ArrayList<Rock>();
 	
 	public Play(int state, GameServer gameServer, ClientData clientData, ServerData serverData) {
 		this.gameServer = gameServer;
@@ -42,6 +44,7 @@ public class Play extends BasicGameState{
 		clientShip = new Image("res/ship.png");
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
+		rock = new Image("res/rock.png");
 
 	}
 
@@ -54,13 +57,16 @@ public class Play extends BasicGameState{
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
 		//targets
-		//generateRocks(g);
-		Rock rock = new Rock();
+		generateRocks(gc.getScreenWidth());
+		renderRocks(g);
+		handleRocks(gc.getScreenHeight());
 		//g.drawImage(rock.getRock(), rock.getX(), rock.getY());
 		
 		chceckClientShoot();
 		renderShoots(g);
 		handleShoots();
+		
+		targetDetection();
 		
 		g.drawString("SERVER", 100, 10);
 		g.drawString("CLIENT POS:", 10, 120);
@@ -71,22 +77,74 @@ public class Play extends BasicGameState{
 		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
 	}
 	
+	private void targetDetection() {
+		for(Iterator<Rock> rockIterator = rocks.iterator(); rockIterator.hasNext();) {
+			Rock currentRock = rockIterator.next();
+			for(Iterator<Bullet> bulletIterator = bullets.iterator(); bulletIterator.hasNext();) {
+				Bullet currentBullet = bulletIterator.next();
+				int currentShipY = 0;
+				if(currentBullet.getAuthor().equals("CLIENT")) {
+					currentShipY = serverData.getShipY();
+				} else if(currentBullet.getAuthor().equals("SERVER")) {
+					currentShipY = clientData.getShipY();
+				}
+				if(currentRock.getY()<currentShipY &&
+					currentBullet.getY()<=currentRock.getY()+currentRock.getHeight() &&
+					currentBullet.getX()+currentBullet.getWidth()<=currentRock.getX()+currentRock.getWidth() &&
+					currentBullet.getX()>=currentRock.getX()) {
+						System.out.println("Kolizja!");
+						rockIterator.remove();
+				}
+			}
+		}
+	}
+	
+	private void generateRocks(int gameContainerWidht) {
+		Random random = new Random();
+		int x = random.nextInt(gameContainerWidht);
+		int y = 0;
+		Rock r = new Rock(rock.copy(),x, y);
+		r.getRock().rotate(random.nextInt(359));
+		if(rocks.size()<5) {
+			rocks.add(r);
+			System.out.println("New rock: " + x + " " + y + " size: " + rocks.size());
+		}
+	}
+	
+	private void handleRocks(int gameContainerHeight) {
+		for(Iterator<Rock> iterator = rocks.iterator(); iterator.hasNext();) {
+			Rock current = iterator.next();
+			current.incrementY(0.05f);
+			if(current.getY() >= gameContainerHeight) {
+				iterator.remove();
+			}
+		}
+	}
+	
+	private void renderRocks(Graphics g) throws SlickException {	
+		for(Rock r : rocks) {
+			g.drawImage(r.getRock(), r.getX(), r.getY());
+			//r.getRock().rotate(1);
+		}
+	}
+	
 	public void newServerShoot() {
-		Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY());
+		Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY(), "SERVER");
 		bullets.add(b);
 	}
 	
 	public void chceckClientShoot() {
 		//TODO: czy to jest poprawnie?
 		if(clientData.getIfNewShootAndReset()) {
-			Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());
+			Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY(), "CLIENT");
 			bullets.add(b);
 		}
 	}
 	
 	private void renderShoots(Graphics g) throws SlickException {	
 		for(Bullet b : bullets) {
-			g.drawImage(new Image("res/bullet.png"), b.getX(), b.getY());
+			g.drawImage(b.getBullet(), b.getX(), b.getY());
+			
 		}
 	}
 	
@@ -134,6 +192,7 @@ public class Play extends BasicGameState{
 		}
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			newServerShoot();
+			serverData.shoot();
 			//serverData.shoot();
 			
 		}

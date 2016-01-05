@@ -1,9 +1,12 @@
 package control;
 
-public class ServerData {
+public class ServerData implements ShipAction{
 
-	private int shipX;
-	private int shipY;
+	private int shipX = 0;
+	private int shipY = 0;
+	private int hp = 100;
+	private int points = 0;
+	private boolean newShoot = false;
 	private static ServerData serverData = null;
 	
 	private ServerData() {
@@ -17,6 +20,15 @@ public class ServerData {
 		}
 		
 		return serverData;
+	}
+	
+	public boolean getIfNewShootAndReset() {
+		if(newShoot) {
+			System.out.println("New shoot from server!");
+			newShoot = false;
+			return true;
+		}
+		return false;
 	}
 
 	public void incrementShipY(int i) {
@@ -41,6 +53,30 @@ public class ServerData {
 
 	public void setShipY(int shipY) {
 		this.shipY = shipY;
+	}
+
+	@Override
+	public void shoot() {
+		newShoot = true;
+		
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPoints() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hurt() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
