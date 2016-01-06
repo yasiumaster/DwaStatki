@@ -11,6 +11,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
 import control.ClientData;
+import control.CollisionDetector;
 import control.ServerData;
 
 public class Play extends BasicGameState{
@@ -23,6 +24,7 @@ public class Play extends BasicGameState{
 	private GameClient gameClient; 
 	private ClientData clientData;
 	private ServerData serverData;
+	private CollisionDetector detector;
 	
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	
@@ -40,7 +42,7 @@ public class Play extends BasicGameState{
 		clientShip = new Image("res/ship.png");
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
-
+		detector = new CollisionDetector(serverData, serverShip, clientData, clientShip);
 	}
 
 	@Override
@@ -100,21 +102,21 @@ public class Play extends BasicGameState{
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
-			if(clientData.getShipY()<210) {
+			if(clientData.getShipY()<210 && detector.noUpCollisionDetected() ) {
 				clientData.incrementShipY(1);
 			}
 		}
-		if(input.isKeyDown(Input.KEY_UP)){
+		if(input.isKeyDown(Input.KEY_UP) && detector.noDownCollisionDetected() ){
 			if(clientData.getShipY()>0) {
 				clientData.incrementShipY(-1);
 			}
 		}
-		if(input.isKeyDown(Input.KEY_RIGHT)){
+		if(input.isKeyDown(Input.KEY_RIGHT) && detector.noRightCollisionDetected() ){
 			if(clientData.getShipX()<530) {
 				clientData.incrementShipX(1);
 			}
 		}
-		if(input.isKeyDown(Input.KEY_LEFT)){
+		if(input.isKeyDown(Input.KEY_LEFT) && detector.noLeftCollisionDetected() ){
 			if(clientData.getShipX()>10) {
 				clientData.incrementShipX(-1);
 			}

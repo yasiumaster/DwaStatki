@@ -2,8 +2,8 @@ package control;
 
 public class ClientData implements ShipAction{
 
-	private int shipX = 0;
-	private int shipY = 0;
+	private int shipX;
+	private int shipY;
 	private int hp = 100;
 	private int points = 0;
 	private boolean newShoot = false;
@@ -53,6 +53,14 @@ public class ClientData implements ShipAction{
 	public void hurt() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void incrementShipY(int i) {
+		shipY +=i;
+	}
+	
+	public void incrementShipX(int i) {
+		shipX +=i;
 	}
 
 	public int getShipX() {

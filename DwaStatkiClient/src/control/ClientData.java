@@ -2,8 +2,8 @@ package control;
 
 public class ClientData implements ShipAction{
 
-	private int shipX = 0;
-	private int shipY = 0;
+	private int shipX;
+	private int shipY;
 	private int hp = 100;
 	private int points = 0;
 	private boolean newShoot = false;

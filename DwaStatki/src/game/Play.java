@@ -13,6 +13,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
 import control.ClientData;
+import control.CollisionDetector;
 import control.ServerData;
 
 public class Play extends BasicGameState{
@@ -27,6 +28,7 @@ public class Play extends BasicGameState{
 	private GameServer gameServer;
 	private ClientData clientData;
 	private ServerData serverData;
+	private CollisionDetector detector;
 	
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	private List<Rock> rocks = new ArrayList<Rock>();
@@ -45,7 +47,7 @@ public class Play extends BasicGameState{
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
 		rock = new Image("res/rock.png");
-
+		detector = new CollisionDetector(serverData, serverShip, clientData, clientShip);
 	}
 
 	@Override
@@ -56,25 +58,26 @@ public class Play extends BasicGameState{
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
-		//targets
+		//TODO: winnerDetection();
+		
 		generateRocks(gc.getScreenWidth());
 		renderRocks(g);
 		handleRocks(gc.getScreenHeight());
-		//g.drawImage(rock.getRock(), rock.getX(), rock.getY());
 		
 		chceckClientShoot();
 		renderShoots(g);
 		handleShoots();
 		
 		targetDetection();
+		//TODO: collisionDetection();
 		
 		g.drawString("SERVER", 100, 10);
 		g.drawString("CLIENT POS:", 10, 120);
 		g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY(),10,150);
 		
 		g.drawString("Use 'Q', 'E' and ARROWS to naviagate. SPACE to shoot.", 10, 50);
-		g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY(),400,80);
-		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
+		g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY() + "\nPoints:"+ serverData.getPoints(),400,80);
+		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,150);
 	}
 	
 	private void targetDetection() {
@@ -83,10 +86,13 @@ public class Play extends BasicGameState{
 			for(Iterator<Bullet> bulletIterator = bullets.iterator(); bulletIterator.hasNext();) {
 				Bullet currentBullet = bulletIterator.next();
 				int currentShipY = 0;
+				String author = "NONE";
 				if(currentBullet.getAuthor().equals("CLIENT")) {
 					currentShipY = serverData.getShipY();
+					author = "CLIENT";
 				} else if(currentBullet.getAuthor().equals("SERVER")) {
 					currentShipY = clientData.getShipY();
+					author = "SERVER";
 				}
 				if(currentRock.getY()<currentShipY &&
 					currentBullet.getY()<=currentRock.getY()+currentRock.getHeight() &&
@@ -94,6 +100,12 @@ public class Play extends BasicGameState{
 					currentBullet.getX()>=currentRock.getX()) {
 						System.out.println("Kolizja!");
 						rockIterator.remove();
+						bulletIterator.remove();
+						if(author.equals("SERVER")) {
+							serverData.addPoints();
+						} else if (author.equals("CLIENT")) {
+							clientData.addPoints();
+						}
 				}
 			}
 		}
@@ -165,22 +177,22 @@ public class Play extends BasicGameState{
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
-			if(serverData.getShipY()<210) {
+			if(serverData.getShipY()<210 && detector.noDownCollisionDetected() ) {
 				serverData.incrementShipY(1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_UP)){
-			if(serverData.getShipY()>0) {
+			if(serverData.getShipY()>0 && detector.noUpCollisionDetected() ) {
 				serverData.incrementShipY(-1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_RIGHT)){
-			if(serverData.getShipX()<530) {
+			if(serverData.getShipX()<530 && detector.noRightCollisionDetected() ) {
 				serverData.incrementShipX(1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_LEFT)){
-			if(serverData.getShipX()>10) {
+			if(serverData.getShipX()>10 && detector.noLeftCollisionDetected() ) {
 				serverData.incrementShipX(-1);
 			}
 		}

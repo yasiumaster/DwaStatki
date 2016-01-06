@@ -33,8 +33,8 @@ public class Game extends StateBasedGame{
 	
 	public static void main(String[] args) {
 		AppGameContainer gameContainer;
-		ClientData clientData = ClientData.createClientData(50, 150);
-		ServerData serverData = ServerData.createServerData(300, 150);
+		ClientData clientData = ClientData.createClientData(150, 200);
+		ServerData serverData = ServerData.createServerData(400, 200);
 		GameServer gameServer = new GameServer(clientData);
 		
 		try {
@@ -44,6 +44,7 @@ public class Game extends StateBasedGame{
 			Game game = new Game(GAMENAME, gameServer, clientData, serverData); 
 			gameContainer = new AppGameContainer(game);
 			gameContainer.setDisplayMode(640, 360, false);
+			//gameContainer.setDisplayMode(1366, 768, false);
 			gameContainer.start();
 
 			

@@ -77,4 +77,7 @@ public class ServerData implements ShipAction {
 		this.shipY = shipY;
 	}
 	
+	public int getPoints() {
+		return points;
+	}
 }

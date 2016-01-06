@@ -27,10 +27,10 @@ public class Menu extends BasicGameState{
 		arg2.drawString("Start!", 320, 185);
 		arg2.drawString("SERVER", 100, 100);
 		
-		/*int ypos = Mouse.getY();
+		int ypos = Mouse.getY();
 		int xpos = Mouse.getX();
 		arg2.drawString("Mouse Y " + ypos, 100, 100);
-		arg2.drawString("Mouse X " + xpos, 250, 100);*/
+		arg2.drawString("Mouse X " + xpos, 250, 100);
 		
 	}
 
