@@ -1,6 +1,7 @@
 package network;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 
@@ -52,6 +53,9 @@ public class GameClient implements Sender{
 		Kryo kryo = client.getKryo();
 		kryo.register(Packet.DefaultPacket.class);
 		kryo.register(Packet.Data.class);
+		kryo.register(Packet.RocksPacket.class);
+		kryo.register(java.util.ArrayList.class, new JavaSerializer());
+		kryo.register(org.newdawn.slick.Image.class, new JavaSerializer());
 	}
 
 }

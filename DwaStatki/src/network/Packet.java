@@ -1,5 +1,10 @@
 package network;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Rock;
+
 public class Packet {
 	
 	public static class DefaultPacket {
@@ -44,6 +49,22 @@ public class Packet {
 		
 		public boolean getNewShoot() {
 			return newShoot;
+		}
+		
+	}
+	
+	public static class RocksPacket {
+		private ArrayList<Rock> rocks;
+		public RocksPacket() {
+			// TODO Auto-generated constructor stub
+		}
+		
+		public RocksPacket(ArrayList<Rock> rocks) {
+			this.rocks = rocks;
+		}
+		
+		public ArrayList<Rock> getRocksList() {
+			return rocks;
 		}
 		
 	}

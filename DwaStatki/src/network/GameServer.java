@@ -1,8 +1,13 @@
 package network;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Rock;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
@@ -31,6 +36,9 @@ public class GameServer implements Sender{
 		Kryo kryo = server.getKryo();
 		kryo.register(Packet.DefaultPacket.class);
 		kryo.register(Packet.Data.class);
+		kryo.register(Packet.RocksPacket.class);
+		kryo.register(java.util.ArrayList.class, new JavaSerializer());
+		kryo.register(org.newdawn.slick.Image.class, new JavaSerializer());
 	}
 
 	@Override
@@ -41,6 +49,13 @@ public class GameServer implements Sender{
 		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getIfNewShootAndReset());
 		server.sendToAllTCP(data);
 		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
+		
+	}
+
+	public void send(ArrayList<Rock> rocks) {
+
+		Packet.RocksPacket data = new Packet.RocksPacket(rocks);
+		server.sendToAllTCP(data);
 		
 	}
 	

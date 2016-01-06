@@ -43,7 +43,7 @@ public class Play extends BasicGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		serverShip = new Image("res/ship.png");
-		clientShip = new Image("res/ship.png");
+		clientShip = new Image("res/ship2.png");
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
 		rock = new Image("res/rock.png");
@@ -61,6 +61,7 @@ public class Play extends BasicGameState{
 		//TODO: winnerDetection();
 		
 		generateRocks(gc.getScreenWidth());
+		//gameServer.send(new ArrayList<Rock>(rocks));
 		renderRocks(g);
 		handleRocks(gc.getScreenHeight());
 		
@@ -69,7 +70,7 @@ public class Play extends BasicGameState{
 		handleShoots();
 		
 		targetDetection();
-		//TODO: collisionDetection();
+		//TODO: targerCollisionDetection();
 		
 		g.drawString("SERVER", 100, 10);
 		g.drawString("CLIENT POS:", 10, 120);
@@ -136,7 +137,6 @@ public class Play extends BasicGameState{
 	private void renderRocks(Graphics g) throws SlickException {	
 		for(Rock r : rocks) {
 			g.drawImage(r.getRock(), r.getX(), r.getY());
-			//r.getRock().rotate(1);
 		}
 	}
 	

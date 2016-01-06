@@ -1,29 +1,50 @@
 package model;
 
+import java.nio.ByteBuffer;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Serialization;
 
 public class Rock {
 
 	Image image;
-	private int x, y;
+	private float x, y;
+	private int width = 0;
+	private int height = 0;
 	
-	public Rock() throws SlickException {
-		image = new Image("res/bullet.png");
-		x = 50;
-		y = 50;
+	public Rock(Image image, int x, int y) {
+		this.image = image;
+		this.x = x;
+		this.y = y;
+		this.height = image.getHeight();
+		this.width = image.getWidth();
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+
 	public Image getRock() {
 		return image;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
+	}
+
+	public void incrementY(float i) {
+		y+=i;
 	}
 	
 	

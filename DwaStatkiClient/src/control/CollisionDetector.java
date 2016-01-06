@@ -17,7 +17,7 @@ public class CollisionDetector {
 		this.serverShip = serverShip;
 	}
 
-	public boolean noLeftCollisionDetected() {
+	public boolean noRightCollisionDetected() {
 		if (clientData.getShipX() + clientShip.getWidth() == serverData.getShipX()) {
 			if (clientData.getShipY() <= serverData.getShipY() + clientShip.getHeight()) {
 				if (serverData.getShipY() <= clientData.getShipY() + clientShip.getHeight()) {
@@ -28,7 +28,7 @@ public class CollisionDetector {
 		return true;
 	}
 	
-	public boolean noRightCollisionDetected() {
+	public boolean noLeftCollisionDetected() {
 		if (serverData.getShipX() + serverShip.getWidth() == clientData.getShipX()) {
 			if (serverData.getShipY() + serverShip.getHeight() >= clientData.getShipY()) {
 				if (clientData.getShipY() + clientShip.getHeight() >= serverData.getShipY()) {
@@ -40,8 +40,8 @@ public class CollisionDetector {
 	}
 	
 	public boolean noUpCollisionDetected() {
-		if (serverData.getShipX() + serverShip.getWidth() >= clientData.getShipX() && serverData.getShipX() <= clientData.getShipX() + clientShip.getWidth()) {
-			if (clientData.getShipY() + clientShip.getHeight() == serverData.getShipY() ) {
+		if (clientData.getShipX() + clientShip.getWidth() >= serverData.getShipX() && clientData.getShipX() <= serverData.getShipX() + serverShip.getWidth()) {
+			if (serverData.getShipY() + serverShip.getHeight() == clientData.getShipY() ) {
 				return false;
 			}
 		}
@@ -49,8 +49,8 @@ public class CollisionDetector {
 	}
 	
 	public boolean noDownCollisionDetected() {
-		if (serverData.getShipX() + serverShip.getWidth() >= clientData.getShipX() && serverData.getShipX() <= clientData.getShipX() + clientShip.getWidth()) {
-			if (clientData.getShipY() == serverData.getShipY() + serverShip.getHeight()) {
+		if (clientData.getShipX() + clientShip.getWidth() >= serverData.getShipX() && clientData.getShipX() <= serverData.getShipX() + serverShip.getWidth()) {
+			if (serverData.getShipY() == clientData.getShipY() + clientShip.getHeight()) {
 				return false;
 			}
 		}

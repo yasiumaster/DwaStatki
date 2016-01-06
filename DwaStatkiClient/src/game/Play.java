@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import model.Bullet;
+import model.Rock;
 import network.GameClient;
 
 import org.newdawn.slick.*;
@@ -39,7 +40,7 @@ public class Play extends BasicGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		serverShip = new Image("res/ship.png");
-		clientShip = new Image("res/ship.png");
+		clientShip = new Image("res/ship2.png");
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
 		detector = new CollisionDetector(serverData, serverShip, clientData, clientShip);
@@ -65,6 +66,22 @@ public class Play extends BasicGameState{
 		g.drawString("Statek X:"+clientData.getShipX() + "\nStatek Y:"+ clientData.getShipY(),400,80);
 		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
 	}
+	
+/*	private void handleRocks(int gameContainerHeight) {
+		for(Iterator<Rock> iterator = rocks.iterator(); iterator.hasNext();) {
+			Rock current = iterator.next();
+			current.incrementY(0.05f);
+			if(current.getY() >= gameContainerHeight) {
+				iterator.remove();
+			}
+		}
+	}
+	
+	private void renderRocks(Graphics g) throws SlickException {	
+		for(Rock r : rocks) {
+			g.drawImage(r.getRock(), r.getX(), r.getY());
+		}
+	}*/
 	
 	public void newClientShoot() {
 		Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());
@@ -102,11 +119,11 @@ public class Play extends BasicGameState{
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
-			if(clientData.getShipY()<210 && detector.noUpCollisionDetected() ) {
+			if(clientData.getShipY()<210 && detector.noDownCollisionDetected() ) {
 				clientData.incrementShipY(1);
 			}
 		}
-		if(input.isKeyDown(Input.KEY_UP) && detector.noDownCollisionDetected() ){
+		if(input.isKeyDown(Input.KEY_UP) && detector.noUpCollisionDetected() ){
 			if(clientData.getShipY()>0) {
 				clientData.incrementShipY(-1);
 			}
