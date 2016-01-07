@@ -26,7 +26,6 @@ public class NetworkListener extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object obj) {
-		//System.out.println("Reviced something...");
 		if(obj instanceof Packet.Data) {
 			//System.out.println("CLIENT DATA");
 			Packet.Data revicePacket = (Packet.Data) obj;
@@ -36,6 +35,9 @@ public class NetworkListener extends Listener {
 			if(revicePacket.getNewShoot()) {
 				clientData.shoot();
 			}
+		}
+		if(obj instanceof Packet.RocksPacket){
+			
 		}
 	}
 

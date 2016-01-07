@@ -1,5 +1,10 @@
 package network;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.RockData;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -9,9 +14,11 @@ import control.ServerData;
 public class NetworkListener extends Listener {
 	
 	private ServerData serverData;
+	private List<RockData> rockData;
 	
-	public NetworkListener(ServerData serverData) {
+	public NetworkListener(ServerData serverData, List<RockData> rockData) {
 		this.serverData = serverData;
+		this.rockData = rockData;
 	}
 	
 	@Override
@@ -29,7 +36,7 @@ public class NetworkListener extends Listener {
 	@Override
 	public void received(Connection connection, Object obj) {
 		if(obj instanceof Packet.Data) {
-			//System.out.println("SERVER DATA: ");
+			System.out.println("Data recived");
 			Packet.Data revicePacket = (Packet.Data) obj;
 			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			serverData.setShipX(revicePacket.getX());
@@ -37,6 +44,14 @@ public class NetworkListener extends Listener {
 			if(revicePacket.getNewShoot()) {
 				serverData.shoot();
 			}
+		}
+		if(obj instanceof Packet.RocksPacket){
+			//TODO problem z przekazaniem otrzymanych danych do klasy Play i ich wygenerowania tam
+			System.out.println("RocketPacket recived");
+			Packet.RocksPacket revicePacket = (Packet.RocksPacket) obj;
+			List<RockData> revicedRockData = revicePacket.getRocksList(); 
+			rockData = revicedRockData;
+			System.out.println("Size: " + rockData.size());
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import model.Bullet;
 import model.Rock;
+import model.RockData;
 import network.GameServer;
 
 import org.newdawn.slick.*;
@@ -32,6 +33,7 @@ public class Play extends BasicGameState{
 	
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	private List<Rock> rocks = new ArrayList<Rock>();
+	private List<RockData> rockData = new ArrayList<>();
 	
 	public Play(int state, GameServer gameServer, ClientData clientData, ServerData serverData) {
 		this.gameServer = gameServer;
@@ -62,6 +64,7 @@ public class Play extends BasicGameState{
 		
 		generateRocks(gc.getScreenWidth());
 		//gameServer.send(new ArrayList<Rock>(rocks));
+		gameServer.send(rockData);
 		renderRocks(g);
 		handleRocks(gc.getScreenHeight());
 		
@@ -117,9 +120,11 @@ public class Play extends BasicGameState{
 		int x = random.nextInt(gameContainerWidht);
 		int y = 0;
 		Rock r = new Rock(rock.copy(),x, y);
-		r.getRock().rotate(random.nextInt(359));
+		int rotation = random.nextInt(359);
+		r.getRock().rotate(rotation);
 		if(rocks.size()<5) {
 			rocks.add(r);
+			rockData.add(new RockData(r.getX(), r.getY(), rotation));
 			System.out.println("New rock: " + x + " " + y + " size: " + rocks.size());
 		}
 	}

@@ -10,7 +10,7 @@ public class Rock {
 	private int width = 0;
 	private int height = 0;
 	
-	public Rock(Image image, int x, int y) {
+	public Rock(Image image, float x, float y) {
 		this.image = image;
 		this.x = x;
 		this.y = y;

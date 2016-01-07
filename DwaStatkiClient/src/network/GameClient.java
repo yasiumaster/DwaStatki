@@ -1,5 +1,9 @@
 package network;
 
+import java.util.List;
+
+import model.RockData;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Client;
@@ -12,9 +16,9 @@ public class GameClient implements Sender{
 	
 	private Client client;
 	
-	public GameClient(ServerData serverData) {
+	public GameClient(ServerData serverData, List<RockData> rockData) {
 		client = new Client();
-		client.addListener(new NetworkListener(serverData));
+		client.addListener(new NetworkListener(serverData, rockData));
 		Log.set(Log.LEVEL_DEBUG);
 	}
 	
@@ -54,8 +58,8 @@ public class GameClient implements Sender{
 		kryo.register(Packet.DefaultPacket.class);
 		kryo.register(Packet.Data.class);
 		kryo.register(Packet.RocksPacket.class);
-		kryo.register(java.util.ArrayList.class, new JavaSerializer());
-		kryo.register(org.newdawn.slick.Image.class, new JavaSerializer());
+		kryo.register(java.util.ArrayList.class);
+		kryo.register(model.RockData.class);
 	}
 
 }

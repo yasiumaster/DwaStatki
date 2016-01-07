@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Rock;
+import model.RockData;
 
 public class Packet {
 	
@@ -50,21 +51,20 @@ public class Packet {
 		public boolean getNewShoot() {
 			return newShoot;
 		}
-		
 	}
 	
 	public static class RocksPacket {
-		private ArrayList<Rock> rocks;
+		private List<RockData> rockData;
 		public RocksPacket() {
 			// TODO Auto-generated constructor stub
 		}
 		
-		public RocksPacket(ArrayList<Rock> rocks) {
-			this.rocks = rocks;
+		public RocksPacket(List<RockData> rockData) {
+			this.rockData = rockData;
 		}
 		
-		public ArrayList<Rock> getRocksList() {
-			return rocks;
+		public List<RockData> getRocksList() {
+			return rockData;
 		}
 		
 	}

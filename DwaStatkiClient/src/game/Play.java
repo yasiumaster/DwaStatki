@@ -6,6 +6,7 @@ import java.util.List;
 
 import model.Bullet;
 import model.Rock;
+import model.RockData;
 import network.GameClient;
 
 import org.newdawn.slick.*;
@@ -17,7 +18,7 @@ import control.ServerData;
 
 public class Play extends BasicGameState{
 
-	Image serverShip, clientShip, bg, bullet; 
+	Image serverShip, clientShip, bg, bullet, rock; 
 
 	float bgX = -200;
 	float bgY = -800;
@@ -28,11 +29,14 @@ public class Play extends BasicGameState{
 	private CollisionDetector detector;
 	
 	private List<Bullet> bullets = new ArrayList<Bullet>();
+	private List<Rock> rocks = new ArrayList<Rock>();
+	private List<RockData> rockData;
 	
-	public Play(int state, GameClient gameClient, ClientData clientData, ServerData serverData) {
+	public Play(int state, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData) {
 		this.serverData = serverData;
 		this.clientData = clientData;
 		this.gameClient = gameClient;
+		this.rockData = rockData;
 	}
 	
 	
@@ -43,6 +47,7 @@ public class Play extends BasicGameState{
 		clientShip = new Image("res/ship2.png");
 		bg = new Image("res/bg.png");
 		bullet = new Image("res/bullet.png");
+		rock = new Image("res/rock.png");
 		detector = new CollisionDetector(serverData, serverShip, clientData, clientShip);
 	}
 
@@ -54,6 +59,10 @@ public class Play extends BasicGameState{
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
+		generateRocks();
+		renderRocks(g);
+		handleRocks(gc.getScreenHeight());
+		
 		chceckServerShoot();
 		renderShoots(g);
 		handleShoots();
@@ -67,7 +76,16 @@ public class Play extends BasicGameState{
 		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,130);
 	}
 	
-/*	private void handleRocks(int gameContainerHeight) {
+	private void generateRocks() {
+		System.out.println("Size in play: " + rockData.size());
+		for(RockData rockDatum : rockData) {
+			Image rockImg = rock.copy();
+			rockImg.rotate(rockDatum.getRotation());
+			rocks.add(new Rock(rockImg, rockDatum.getX(), rockDatum.getY()));
+		}
+	}
+	
+	private void handleRocks(int gameContainerHeight) {
 		for(Iterator<Rock> iterator = rocks.iterator(); iterator.hasNext();) {
 			Rock current = iterator.next();
 			current.incrementY(0.05f);
@@ -81,7 +99,7 @@ public class Play extends BasicGameState{
 		for(Rock r : rocks) {
 			g.drawImage(r.getRock(), r.getX(), r.getY());
 		}
-	}*/
+	}
 	
 	public void newClientShoot() {
 		Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());

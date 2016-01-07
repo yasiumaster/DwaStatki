@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Rock;
+import model.RockData;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
@@ -37,8 +38,8 @@ public class GameServer implements Sender{
 		kryo.register(Packet.DefaultPacket.class);
 		kryo.register(Packet.Data.class);
 		kryo.register(Packet.RocksPacket.class);
-		kryo.register(java.util.ArrayList.class, new JavaSerializer());
-		kryo.register(org.newdawn.slick.Image.class, new JavaSerializer());
+		kryo.register(java.util.ArrayList.class);
+		kryo.register(model.RockData.class);
 	}
 
 	@Override
@@ -52,9 +53,9 @@ public class GameServer implements Sender{
 		
 	}
 
-	public void send(ArrayList<Rock> rocks) {
+	public void send(List<RockData> rockData) {
 
-		Packet.RocksPacket data = new Packet.RocksPacket(rocks);
+		Packet.RocksPacket data = new Packet.RocksPacket(rockData);
 		server.sendToAllTCP(data);
 		
 	}
