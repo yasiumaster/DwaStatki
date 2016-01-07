@@ -77,7 +77,7 @@ public class Play extends BasicGameState{
 		
 		g.drawString("SERVER", 100, 10);
 		g.drawString("CLIENT POS:", 10, 120);
-		g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY(),10,150);
+		g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY() + "\nPoints:"+ clientData.getPoints(),10,150);
 		
 		g.drawString("Use 'Q', 'E' and ARROWS to naviagate. SPACE to shoot.", 10, 50);
 		g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY() + "\nPoints:"+ serverData.getPoints(),400,80);

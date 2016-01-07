@@ -79,5 +79,7 @@ public class ClientData implements ShipAction{
 		this.shipY = shipY;
 	}
 	
-	
+	public int getPoints() {
+		return points;
+	}
 }
