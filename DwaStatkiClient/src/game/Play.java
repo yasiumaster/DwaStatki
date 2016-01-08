@@ -31,12 +31,14 @@ public class Play extends BasicGameState{
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	private List<Rock> rocks = new ArrayList<Rock>();
 	private List<RockData> rockData;
+	private List<Integer> toRemoveRocks;
 	
-	public Play(int state, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData) {
+	public Play(int state, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
 		this.serverData = serverData;
 		this.clientData = clientData;
 		this.gameClient = gameClient;
 		this.rockData = rockData;
+		this.toRemoveRocks = toRemoveRocks;
 	}
 	
 	
@@ -77,18 +79,30 @@ public class Play extends BasicGameState{
 	}
 	
 	private void generateRocks() {
-		System.out.println("Size in play: " + rockData.size());
-		for(RockData rockDatum : rockData) {
+		//System.out.println("Size in play: " + rockData.size());
+		for(Iterator<RockData> iterator = rockData.iterator(); iterator.hasNext();) {
+			RockData rockDatum = iterator.next();
+			iterator.remove();
 			Image rockImg = rock.copy();
 			rockImg.rotate(rockDatum.getRotation());
-			rocks.add(new Rock(rockImg, rockDatum.getX(), rockDatum.getY()));
+			System.out.println(rockDatum.getX() + " " + rockDatum.getY());
+			rocks.add(new Rock(rockImg, rockDatum.getX(), rockDatum.getY(), rockDatum.getId()));
 		}
 	}
 	
 	private void handleRocks(int gameContainerHeight) {
 		for(Iterator<Rock> iterator = rocks.iterator(); iterator.hasNext();) {
 			Rock current = iterator.next();
+			boolean removed = false;
 			current.incrementY(0.05f);
+			for(Integer toRemoveRock : toRemoveRocks) {
+				if(current.getId() == toRemoveRock) {
+					iterator.remove();
+					removed = true;
+				}
+			}
+			if(removed)
+				continue;
 			if(current.getY() >= gameContainerHeight) {
 				iterator.remove();
 			}

@@ -64,7 +64,6 @@ public class Play extends BasicGameState{
 		
 		generateRocks(gc.getScreenWidth());
 		//gameServer.send(new ArrayList<Rock>(rocks));
-		gameServer.send(rockData);
 		renderRocks(g);
 		handleRocks(gc.getScreenHeight());
 		
@@ -92,10 +91,10 @@ public class Play extends BasicGameState{
 				int currentShipY = 0;
 				String author = "NONE";
 				if(currentBullet.getAuthor().equals("CLIENT")) {
-					currentShipY = serverData.getShipY();
+					currentShipY = clientData.getShipY();
 					author = "CLIENT";
 				} else if(currentBullet.getAuthor().equals("SERVER")) {
-					currentShipY = clientData.getShipY();
+					currentShipY = serverData.getShipY();
 					author = "SERVER";
 				}
 				if(currentRock.getY()<currentShipY &&
@@ -103,6 +102,7 @@ public class Play extends BasicGameState{
 					currentBullet.getX()+currentBullet.getWidth()<=currentRock.getX()+currentRock.getWidth() &&
 					currentBullet.getX()>=currentRock.getX()) {
 						System.out.println("Kolizja!");
+						gameServer.send(currentRock.getId());
 						rockIterator.remove();
 						bulletIterator.remove();
 						if(author.equals("SERVER")) {
@@ -119,12 +119,14 @@ public class Play extends BasicGameState{
 		Random random = new Random();
 		int x = random.nextInt(gameContainerWidht);
 		int y = 0;
-		Rock r = new Rock(rock.copy(),x, y);
+		int id = random.nextInt(10000);
+		Rock r = new Rock(rock.copy(),x, y, id);
 		int rotation = random.nextInt(359);
 		r.getRock().rotate(rotation);
 		if(rocks.size()<5) {
 			rocks.add(r);
-			rockData.add(new RockData(r.getX(), r.getY(), rotation));
+			rockData.add(new RockData(r.getX(), r.getY(), rotation, id));
+			gameServer.send(rockData);
 			System.out.println("New rock: " + x + " " + y + " size: " + rocks.size());
 		}
 	}

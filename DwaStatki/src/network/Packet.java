@@ -68,4 +68,15 @@ public class Packet {
 		}
 		
 	}
+	
+	public static class RockToRemove {
+		private int rockToRemove;
+		public RockToRemove(int rockToRemoveId) {
+			// TODO Auto-generated constructor stub
+		}
+		
+		public int getRockToRemoveId() {
+			return rockToRemove;
+		}
+	}
 }

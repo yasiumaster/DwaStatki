@@ -15,10 +15,12 @@ public class NetworkListener extends Listener {
 	
 	private ServerData serverData;
 	private List<RockData> rockData;
+	private List<Integer> toRemoveRocks;
 	
-	public NetworkListener(ServerData serverData, List<RockData> rockData) {
+	public NetworkListener(ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
 		this.serverData = serverData;
 		this.rockData = rockData;
+		this.toRemoveRocks = toRemoveRocks;
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class NetworkListener extends Listener {
 	@Override
 	public void received(Connection connection, Object obj) {
 		if(obj instanceof Packet.Data) {
-			System.out.println("Data recived");
+			//System.out.println("Data recived");
 			Packet.Data revicePacket = (Packet.Data) obj;
 			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			serverData.setShipX(revicePacket.getX());
@@ -47,12 +49,18 @@ public class NetworkListener extends Listener {
 		}
 		if(obj instanceof Packet.RocksPacket){
 			//TODO problem z przekazaniem otrzymanych danych do klasy Play i ich wygenerowania tam
-			System.out.println("RocketPacket recived");
+			//System.out.println("RocketPacket recived");
 			Packet.RocksPacket revicePacket = (Packet.RocksPacket) obj;
-			List<RockData> revicedRockData = revicePacket.getRocksList(); 
-			rockData = revicedRockData;
-			System.out.println("Size: " + rockData.size());
+			List<RockData> revicedRockData = revicePacket.getRocksList();
+			int lastIndex = revicedRockData.size() - 1;
+			rockData.add(revicedRockData.get(lastIndex));
 		}
+		if(obj instanceof Packet.RockToRemove) {
+			System.out.println("To remove");
+			Packet.RockToRemove revicePacket = (Packet.RockToRemove) obj;
+			toRemoveRocks.add(revicePacket.getRockToRemoveId());
+		}
+		
 	}
 
 }

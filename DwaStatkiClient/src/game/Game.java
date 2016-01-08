@@ -20,10 +20,10 @@ public class Game extends StateBasedGame{
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
 	
-	public Game(String name, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData) {
+	public Game(String name, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
 		super(name);
 		this.addState(new Menu(MENU));
-		this.addState(new Play(PLAY, gameClient, clientData, serverData, rockData));
+		this.addState(new Play(PLAY, gameClient, clientData, serverData, rockData, toRemoveRocks));
 	}
 
 	@Override
@@ -38,12 +38,13 @@ public class Game extends StateBasedGame{
 		ClientData clientData = ClientData.createClientData(50, 150);
 		ServerData serverData = ServerData.createServerData(300, 150);
 		List<RockData> rockData = new ArrayList<>();
-		GameClient gameClient = new GameClient(serverData, rockData);
+		List<Integer> toRemoveRocks = new ArrayList<>();
+		GameClient gameClient = new GameClient(serverData, rockData, toRemoveRocks);
 		try {
 			gameClient.start(PORT);
 			System.out.println("Client started");
 			
-			Game game = new Game(GAMENAME, gameClient, clientData, serverData, rockData); 
+			Game game = new Game(GAMENAME, gameClient, clientData, serverData, rockData, toRemoveRocks); 
 			gameContainer = new AppGameContainer(game);
 			gameContainer.setDisplayMode(640, 360, false);
 			gameContainer.start();

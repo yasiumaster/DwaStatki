@@ -16,9 +16,9 @@ public class GameClient implements Sender{
 	
 	private Client client;
 	
-	public GameClient(ServerData serverData, List<RockData> rockData) {
+	public GameClient(ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
 		client = new Client();
-		client.addListener(new NetworkListener(serverData, rockData));
+		client.addListener(new NetworkListener(serverData, rockData, toRemoveRocks));
 		Log.set(Log.LEVEL_DEBUG);
 	}
 	
@@ -60,6 +60,7 @@ public class GameClient implements Sender{
 		kryo.register(Packet.RocksPacket.class);
 		kryo.register(java.util.ArrayList.class);
 		kryo.register(model.RockData.class);
+		kryo.register(Packet.RockToRemove.class);
 	}
 
 }

@@ -40,6 +40,7 @@ public class GameServer implements Sender{
 		kryo.register(Packet.RocksPacket.class);
 		kryo.register(java.util.ArrayList.class);
 		kryo.register(model.RockData.class);
+		kryo.register(Packet.RockToRemove.class);
 	}
 
 	@Override
@@ -50,6 +51,12 @@ public class GameServer implements Sender{
 		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getIfNewShootAndReset());
 		server.sendToAllTCP(data);
 		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
+		
+	}
+	
+	public void send(int rockToRemoveId) {
+		Packet.RockToRemove data = new Packet.RockToRemove(rockToRemoveId);
+		server.sendToAllTCP(data);
 		
 	}
 
