@@ -1,6 +1,7 @@
 package game;
 
-import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +17,23 @@ import control.ServerData;
 public class Game extends StateBasedGame{
 
 	public static final String GAMENAME = "2dGame";
-	public static final int PORT = 54555;
+	public static int PORT = 54555;
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
+	public static final int OPTIONS = 2;
 	
 	public Game(String name, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
 		super(name);
 		this.addState(new Menu(MENU));
 		this.addState(new Play(PLAY, gameClient, clientData, serverData, rockData, toRemoveRocks));
+		this.addState(new Options(OPTIONS));
 	}
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		this.getState(MENU).init(gc, this);
 		this.getState(PLAY).init(gc, this);
+		this.getState(OPTIONS).init(gc, this);
 		this.enterState(MENU);
 	}
 	
@@ -40,13 +44,22 @@ public class Game extends StateBasedGame{
 		List<RockData> rockData = new ArrayList<>();
 		List<Integer> toRemoveRocks = new ArrayList<>();
 		GameClient gameClient = new GameClient(serverData, rockData, toRemoveRocks);
+		String IPAddress = null;
 		try {
-			gameClient.start(PORT);
+			IPAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			gameClient.start("192.168.0.16", PORT);
 			System.out.println("Client started");
 			
 			Game game = new Game(GAMENAME, gameClient, clientData, serverData, rockData, toRemoveRocks); 
 			gameContainer = new AppGameContainer(game);
-			gameContainer.setDisplayMode(640, 360, false);
+			int displayX = gameContainer.getScreenWidth();
+			int displayY = gameContainer.getScreenHeight();
+			gameContainer.setDisplayMode(640, 480, false);
+			//gameContainer.setDisplayMode(displayX, displayY, true);
 			gameContainer.start();
 			
 		} catch(SlickException e) {

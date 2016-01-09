@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import network.Packet.GameData;
 import model.Rock;
 import model.RockData;
 
@@ -41,6 +42,7 @@ public class GameServer implements Sender{
 		kryo.register(java.util.ArrayList.class);
 		kryo.register(model.RockData.class);
 		kryo.register(Packet.RockToRemove.class);
+		kryo.register(Packet.GameData.class);
 	}
 
 	@Override
@@ -48,13 +50,14 @@ public class GameServer implements Sender{
 /*		int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
 		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
-		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getIfNewShootAndReset());
+		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getPoints(), serverData.getIfNewShootAndReset());
 		server.sendToAllTCP(data);
 		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
 		
 	}
 	
 	public void send(int rockToRemoveId) {
+		System.out.println("Send: " + rockToRemoveId);
 		Packet.RockToRemove data = new Packet.RockToRemove(rockToRemoveId);
 		server.sendToAllTCP(data);
 		
@@ -67,6 +70,11 @@ public class GameServer implements Sender{
 		
 	}
 	
-	
+	public void send(String winner) {
+
+		Packet.GameData data = new Packet.GameData(winner);
+		server.sendToAllTCP(data);
+		
+	}
 
 }

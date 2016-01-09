@@ -29,15 +29,16 @@ public class Packet {
 	
 	public static class Data {
 
-		private int x,y;
+		private int x,y,points;
 		private boolean newShoot;
 		public Data() {
 			// TODO Auto-generated constructor stub
 		}
-		public Data(int x, int y, boolean newShoot) {
+		public Data(int x, int y, int points, boolean newShoot) {
 			this.x = x;
 			this.y = y;
 			this.newShoot = newShoot;
+			this.points = points;
 		}
 		
 		public int getX() {
@@ -50,6 +51,10 @@ public class Packet {
 		
 		public boolean getNewShoot() {
 			return newShoot;
+		}
+		
+		public int getPoints() {
+			return points;
 		}
 	}
 	
@@ -71,12 +76,29 @@ public class Packet {
 	
 	public static class RockToRemove {
 		private int rockToRemove;
-		public RockToRemove(int rockToRemoveId) {
+		public RockToRemove() {
 			// TODO Auto-generated constructor stub
+		}
+		public RockToRemove(int rockToRemoveId) {
+			this.rockToRemove = rockToRemoveId;
 		}
 		
 		public int getRockToRemoveId() {
 			return rockToRemove;
+		}
+	}
+	
+	public static class GameData {
+		private String winner;
+		public GameData() {
+			// TODO Auto-generated constructor stub
+		}
+		public GameData(String winner) {
+			this.winner = winner;
+		}
+		
+		public String getWinner() {
+			return winner;
 		}
 	}
 }

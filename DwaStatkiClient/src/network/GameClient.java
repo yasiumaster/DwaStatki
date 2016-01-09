@@ -27,15 +27,15 @@ public class GameClient implements Sender{
 		/*int mouseX = gc.getInput().getMouseX();
 		int mouseY = gc.getInput().getMouseY();
 		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
-		Packet.Data data = new Packet.Data(clientData.getShipX(), clientData.getShipY(), clientData.getIfNewShootAndReset());
+		Packet.Data data = new Packet.Data(clientData.getShipX(), clientData.getShipY(), clientData.getPoints(), clientData.getIfNewShootAndReset());
 		client.sendTCP(data);
 		
 	}
 	
-	public void start(int port) throws Exception {
+	public void start(String ip, int port) throws Exception {
 		registerPackets();
 		client.start();
-		client.connect(5000, "localhost", port);
+		client.connect(5000, ip, port);
 		Thread.sleep(1000);
 		new Thread( new Runnable() {
 			
@@ -61,6 +61,7 @@ public class GameClient implements Sender{
 		kryo.register(java.util.ArrayList.class);
 		kryo.register(model.RockData.class);
 		kryo.register(Packet.RockToRemove.class);
+		kryo.register(Packet.GameData.class);
 	}
 
 }

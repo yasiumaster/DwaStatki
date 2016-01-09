@@ -38,9 +38,9 @@ public class ClientData implements ShipAction{
 	}
 
 	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-		
+	public void reset() {
+		hp = 100;
+		points = 0;
 	}
 
 	@Override
@@ -79,4 +79,11 @@ public class ClientData implements ShipAction{
 		this.shipY = shipY;
 	}
 
+	public int getPoints() {
+		return points;
+	}
+	
+	public void setPoints(int i) {
+		this.points = i;
+	}
 }

@@ -6,6 +6,10 @@ import org.newdawn.slick.state.*;
 
 public class Menu extends BasicGameState{
 
+	private Image startButton;
+	private int startImgX;
+	private int startImgY;
+	
 	public Menu(int state) {
 		
 	}
@@ -13,7 +17,9 @@ public class Menu extends BasicGameState{
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		startButton = new Image("res/start_button_small.png");
+		startImgX = arg0.getScreenWidth()/2 - startButton.getWidth()/2;
+		startImgY = arg0.getScreenHeight()/2 - startButton.getHeight()/2;
 		
 	}
 
@@ -21,16 +27,14 @@ public class Menu extends BasicGameState{
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		arg2.drawImage(new Image("res/bg.png"), 0, 0);
-		arg2.setColor(Color.blue);
-		arg2.fillRect(300, 180, 90, 25);
-		arg2.setColor(Color.white);
-		arg2.drawString("Start!", 320, 185);
 		arg2.drawString("SERVER", 100, 100);
 		
-		int ypos = Mouse.getY();
+/*		int ypos = Mouse.getY();
 		int xpos = Mouse.getX();
 		arg2.drawString("Mouse Y " + ypos, 100, 100);
-		arg2.drawString("Mouse X " + xpos, 250, 100);
+		arg2.drawString("Mouse X " + xpos, 250, 100);*/
+		
+		arg2.drawImage(startButton, startImgX, startImgY);
 		
 	}
 
@@ -41,10 +45,17 @@ public class Menu extends BasicGameState{
 		int xpos = Mouse.getX();
 		int ypos = Mouse.getY();
 		
-		if((xpos>300 && xpos<390)&&(ypos>155 && ypos<180)) {
+		if(input.isKeyPressed(Input.KEY_ENTER)) {
+			arg1.enterState(1);
+		}
+		if(xpos>startImgX && xpos<startImgX+startButton.getWidth() 
+				&& ypos>startImgY && ypos<startImgY+startButton.getHeight()) {
 			if(input.isMouseButtonDown(0)) {
 				arg1.enterState(1);
 			}
+		}
+		if(input.isKeyPressed(Input.KEY_ESCAPE)) {
+			arg0.exit();
 		}
 		
 	}

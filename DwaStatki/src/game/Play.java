@@ -19,12 +19,15 @@ import control.ServerData;
 
 public class Play extends BasicGameState{
 	
+	private final int POINTS_TO_WIN = 10;
+	
+	private boolean showInfo = false;
+	private String winner = "NONE";
+	private int timer = 0;
+	
 	int shooted = 0;
 	
 	Image serverShip, clientShip, bg, bullet, rock; 
-	
-	float bgX = -200;
-	float bgY = -800;
 	
 	private GameServer gameServer;
 	private ClientData clientData;
@@ -41,9 +44,19 @@ public class Play extends BasicGameState{
 		this.serverData = serverData;
 	}
 	
+	//for reset game
+	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		winner = "NONE";
+		clientData.reset();
+		serverData.reset();
+	}
+	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		arg0.setShowFPS(false);
 		serverShip = new Image("res/ship.png");
 		clientShip = new Image("res/ship2.png");
 		bg = new Image("res/bg.png");
@@ -55,17 +68,21 @@ public class Play extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		gc.setShowFPS(showInfo);
 		gameServer.send(serverData);
-		g.drawImage(bg, bgX, bgY);
+		g.drawImage(bg, 0, 0);
 		g.drawImage(serverShip, serverData.getShipX(), serverData.getShipY());
 		g.drawImage(clientShip, clientData.getShipX(), clientData.getShipY());
 
-		//TODO: winnerDetection();
+		winnerDetection(sbg, g);
 		
 		generateRocks(gc.getScreenWidth());
 		//gameServer.send(new ArrayList<Rock>(rocks));
 		renderRocks(g);
 		handleRocks(gc.getScreenHeight());
+		
+		g.drawString("SERVER: " + serverData.getPoints(), 10, 20);
+		g.drawString("CLIENT: " + clientData.getPoints(), 10, 50);
 		
 		chceckClientShoot();
 		renderShoots(g);
@@ -74,13 +91,32 @@ public class Play extends BasicGameState{
 		targetDetection();
 		//TODO: targerCollisionDetection();
 		
-		g.drawString("SERVER", 100, 10);
-		g.drawString("CLIENT POS:", 10, 120);
-		g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY() + "\nPoints:"+ clientData.getPoints(),10,150);
-		
-		g.drawString("Use 'Q', 'E' and ARROWS to naviagate. SPACE to shoot.", 10, 50);
-		g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY() + "\nPoints:"+ serverData.getPoints(),400,80);
-		g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,150);
+		if(showInfo) {
+			g.drawString("SERVER", 100, 10);
+			g.drawString("timer " + timer, 100, 20);
+			g.drawString("CLIENT POS:", 10, 120);
+			g.drawString("X:"+clientData.getShipX() + "\nY:"+ clientData.getShipY() + "\nPoints:"+ clientData.getPoints(),10,150);
+			
+			g.drawString("Use ARROWS to naviagate. SPACE to shoot.", 10, 50);
+			g.drawString("Statek X:"+serverData.getShipX() + "\nStatek Y:"+ serverData.getShipY() + "\nPoints:"+ serverData.getPoints(),400,80);
+			//g.drawString("BG X:"+bgX + "\nBG Y:"+ bgY,400,150);
+		}
+	}
+	
+	private void winnerDetection(StateBasedGame sbg, Graphics g) {
+			if(clientData.getPoints()>=POINTS_TO_WIN) {
+				winner = "CLIENT";
+			}
+			if(serverData.getPoints()>=POINTS_TO_WIN) {
+				winner = "SERVER";
+			}
+			if(!winner.equals("NONE")) {
+				timer=0;
+				g.drawString("WINNER IS: " + winner, 100, 100);
+				gameServer.send(winner);
+				if(timer>3000)
+					sbg.enterState(0);
+			}
 	}
 	
 	private void targetDetection() {
@@ -101,7 +137,7 @@ public class Play extends BasicGameState{
 					currentBullet.getY()<=currentRock.getY()+currentRock.getHeight() &&
 					currentBullet.getX()+currentBullet.getWidth()<=currentRock.getX()+currentRock.getWidth() &&
 					currentBullet.getX()>=currentRock.getX()) {
-						System.out.println("Kolizja!");
+						System.out.println("Autor: " + author);
 						gameServer.send(currentRock.getId());
 						rockIterator.remove();
 						bulletIterator.remove();
@@ -127,7 +163,6 @@ public class Play extends BasicGameState{
 			rocks.add(r);
 			rockData.add(new RockData(r.getX(), r.getY(), rotation, id));
 			gameServer.send(rockData);
-			System.out.println("New rock: " + x + " " + y + " size: " + rocks.size());
 		}
 	}
 	
@@ -181,45 +216,46 @@ public class Play extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int g)
 			throws SlickException {
 		//gameServer.send(serverData);
+		timer+=1;
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_DOWN)){
-			if(serverData.getShipY()<210 && detector.noDownCollisionDetected() ) {
+			if(serverData.getShipY()<gc.getHeight() - 10 && detector.noDownCollisionDetected() ) {
 				serverData.incrementShipY(1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_UP)){
-			if(serverData.getShipY()>0 && detector.noUpCollisionDetected() ) {
+			if(serverData.getShipY()>0 + 10 && detector.noUpCollisionDetected() ) {
 				serverData.incrementShipY(-1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_RIGHT)){
-			if(serverData.getShipX()<530 && detector.noRightCollisionDetected() ) {
+			if(serverData.getShipX()<gc.getWidth() - 10 && detector.noRightCollisionDetected() ) {
 				serverData.incrementShipX(1);
 			}
 		}
 		if(input.isKeyDown(Input.KEY_LEFT)){
-			if(serverData.getShipX()>10 && detector.noLeftCollisionDetected() ) {
+			if(serverData.getShipX()>0 + 10 && detector.noLeftCollisionDetected() ) {
 				serverData.incrementShipX(-1);
 			}
-		}
-		if(input.isKeyDown(Input.KEY_E)) {
-			serverShip.rotate(1);
-		}
-		else if(input.isKeyDown(Input.KEY_Q)) {
-			serverShip.rotate(-1);
 		}
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			newServerShoot();
 			serverData.shoot();
-			//serverData.shoot();
-			
+		}
+		if(input.isKeyPressed(Input.KEY_F2)) {
+			if(showInfo)
+				showInfo = false;
+			else
+				showInfo = true;
+		}
+		if(input.isKeyPressed(Input.KEY_ESCAPE)) {
+			sbg.enterState(0);
 		}
 	}
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 	

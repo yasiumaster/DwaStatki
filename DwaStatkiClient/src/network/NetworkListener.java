@@ -1,6 +1,5 @@
 package network;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.RockData;
@@ -8,7 +7,7 @@ import model.RockData;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import control.ClientData;
+import control.GameHelper;
 import control.ServerData;
 
 public class NetworkListener extends Listener {
@@ -43,6 +42,7 @@ public class NetworkListener extends Listener {
 			//System.out.println("Mouse X: " + revicePacket.getX() + " Mouse Y:" + revicePacket.getY());
 			serverData.setShipX(revicePacket.getX());
 			serverData.setShipY(revicePacket.getY());
+			serverData.setPoints(revicePacket.getPoints());
 			if(revicePacket.getNewShoot()) {
 				serverData.shoot();
 			}
@@ -54,11 +54,18 @@ public class NetworkListener extends Listener {
 			List<RockData> revicedRockData = revicePacket.getRocksList();
 			int lastIndex = revicedRockData.size() - 1;
 			rockData.add(revicedRockData.get(lastIndex));
+			//System.out.println("Recived rock dataId: " + revicedRockData.get(lastIndex).getId());
 		}
 		if(obj instanceof Packet.RockToRemove) {
-			System.out.println("To remove");
 			Packet.RockToRemove revicePacket = (Packet.RockToRemove) obj;
-			toRemoveRocks.add(revicePacket.getRockToRemoveId());
+			Integer recivedRockId = revicePacket.getRockToRemoveId();
+			System.out.println("Listener: to remove: " + recivedRockId);
+			toRemoveRocks.add(recivedRockId);
+		}
+		if(obj instanceof Packet.GameData) {
+			Packet.GameData revicePacket = (Packet.GameData) obj;
+			String recivedWinner = revicePacket.getWinner();
+			GameHelper.setWinner(recivedWinner);
 		}
 		
 	}

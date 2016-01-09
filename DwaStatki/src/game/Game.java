@@ -1,6 +1,8 @@
 package game;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import network.GameServer;
 
@@ -36,6 +38,12 @@ public class Game extends StateBasedGame{
 		ClientData clientData = ClientData.createClientData(150, 200);
 		ServerData serverData = ServerData.createServerData(400, 200);
 		GameServer gameServer = new GameServer(clientData);
+		String IPAddress = null;
+		try {
+			IPAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			gameServer.start(PORT);
@@ -43,8 +51,10 @@ public class Game extends StateBasedGame{
 			
 			Game game = new Game(GAMENAME, gameServer, clientData, serverData); 
 			gameContainer = new AppGameContainer(game);
-			gameContainer.setDisplayMode(640, 360, false);
-			//gameContainer.setDisplayMode(1366, 768, false);
+			int displayX = gameContainer.getScreenWidth();
+			int displayY = gameContainer.getScreenHeight();
+			gameContainer.setDisplayMode(640, 480, false);
+			//gameContainer.setDisplayMode(displayX, displayY, true);
 			gameContainer.start();
 
 			
