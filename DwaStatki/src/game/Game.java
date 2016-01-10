@@ -1,6 +1,9 @@
 package game;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -34,6 +37,15 @@ public class Game extends StateBasedGame{
 	}
 	
 	public static void main(String[] args) {
+		PrintStream out, err;
+		try {
+			out = new PrintStream(new FileOutputStream("server.log"));
+			err = new PrintStream(new FileOutputStream("error.log"));
+			System.setOut(out);
+			System.setErr(err);
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
 		AppGameContainer gameContainer;
 		ClientData clientData = ClientData.createClientData(150, 200);
 		ServerData serverData = ServerData.createServerData(400, 200);
@@ -44,7 +56,7 @@ public class Game extends StateBasedGame{
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		
+		System.out.println("IP_SERVER: " + IPAddress);
 		try {
 			gameServer.start(PORT);
 			System.out.println("Server started");
@@ -53,7 +65,7 @@ public class Game extends StateBasedGame{
 			gameContainer = new AppGameContainer(game);
 			int displayX = gameContainer.getScreenWidth();
 			int displayY = gameContainer.getScreenHeight();
-			gameContainer.setDisplayMode(640, 480, false);
+			//gameContainer.setDisplayMode(640, 480, false);
 			//gameContainer.setDisplayMode(displayX, displayY, true);
 			gameContainer.start();
 

@@ -1,5 +1,8 @@
 package game;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -38,6 +41,15 @@ public class Game extends StateBasedGame{
 	}
 	
 	public static void main(String[] args) {
+		PrintStream out, err;
+		try {
+			out = new PrintStream(new FileOutputStream("client.log"));
+			err = new PrintStream(new FileOutputStream("error.log"));
+			System.setOut(out);
+			System.setErr(err);
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
 		AppGameContainer gameContainer;
 		ClientData clientData = ClientData.createClientData(50, 150);
 		ServerData serverData = ServerData.createServerData(300, 150);

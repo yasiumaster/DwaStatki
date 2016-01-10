@@ -3,3 +3,8 @@ DwaStatki/lib/jars
 DwaStatki/lib/natives
 DwaStatkiClient/lib/jars
 DwaStatkiClient/lib/natives
+DwaStatkiClient/error.log
+DwaStatkiClient/client.log
+DwaStatki/error.log
+DwaStatki/server.log
+bin
