@@ -41,8 +41,8 @@ public class Game extends StateBasedGame{
 		try {
 			out = new PrintStream(new FileOutputStream("server.log"));
 			err = new PrintStream(new FileOutputStream("error.log"));
-			System.setOut(out);
-			System.setErr(err);
+			//System.setOut(out);
+			//System.setErr(err);
 		} catch (FileNotFoundException e2) {
 			e2.printStackTrace();
 		}

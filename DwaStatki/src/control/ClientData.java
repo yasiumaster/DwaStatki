@@ -50,8 +50,8 @@ public class ClientData implements ShipAction{
 
 	@Override
 	public void hurt() {
-		// TODO Auto-generated method stub
-		
+		if(hp>0)
+			hp-=10;
 	}
 	
 	public void incrementShipY(int i) {
@@ -80,5 +80,9 @@ public class ClientData implements ShipAction{
 	
 	public int getPoints() {
 		return points;
+	}
+	
+	public int getHP() {
+		return hp;
 	}
 }

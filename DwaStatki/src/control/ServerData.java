@@ -50,7 +50,8 @@ public class ServerData implements ShipAction {
 
 	@Override
 	public void hurt() {
-		hp-=1;
+		if(hp>0)
+			hp-=10;
 	}
 
 	public void incrementShipY(int i) {
@@ -79,5 +80,9 @@ public class ServerData implements ShipAction {
 	
 	public int getPoints() {
 		return points;
+	}
+	
+	public int getHP() {
+		return hp;
 	}
 }

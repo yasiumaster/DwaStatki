@@ -83,13 +83,14 @@ public class Play extends BasicGameState{
 		
 		g.drawString("SERVER: " + serverData.getPoints(), 10, 20);
 		g.drawString("CLIENT: " + clientData.getPoints(), 10, 50);
+		g.drawString("HP: " + serverData.getHP(), 10, 80);
 		
 		chceckClientShoot();
 		renderShoots(g);
 		handleShoots();
 		
 		targetDetection();
-		//TODO: targerCollisionDetection();
+		targetCollisionDetection();
 		
 		if(showInfo) {
 			g.drawString("SERVER", 100, 10);
@@ -104,10 +105,10 @@ public class Play extends BasicGameState{
 	}
 	
 	private void winnerDetection(StateBasedGame sbg, Graphics g) {
-			if(clientData.getPoints()>=POINTS_TO_WIN) {
+			if(clientData.getPoints()>=POINTS_TO_WIN || serverData.getHP()==0) {
 				winner = "CLIENT";
 			}
-			if(serverData.getPoints()>=POINTS_TO_WIN) {
+			if(serverData.getPoints()>=POINTS_TO_WIN || clientData.getHP()==0) {
 				winner = "SERVER";
 			}
 			if(!winner.equals("NONE")) {
@@ -117,6 +118,35 @@ public class Play extends BasicGameState{
 				if(timer>3000)
 					sbg.enterState(0);
 			}
+	}
+	
+	private void targetCollisionDetection() {
+		for(Iterator<Rock> rockIterator = rocks.iterator(); rockIterator.hasNext();) {
+			Rock currentRock = rockIterator.next();
+			if(serverData.getShipX()+serverShip.getWidth()>=currentRock.getX()) {
+				if(currentRock.getX()<serverData.getShipX()+serverShip.getWidth()) {
+					if(serverData.getShipX()<currentRock.getWidth()+currentRock.getX()) {
+						if(currentRock.getY()+currentRock.getHeight()>=serverData.getShipY() && currentRock.getY()<=serverData.getShipY()+serverShip.getHeight()) {
+							serverData.hurt();
+							rockIterator.remove();
+						}
+					}
+				}
+			}
+			
+			if(clientData.getShipX()+clientShip.getWidth()>=currentRock.getX()) {
+				if(currentRock.getX()<clientData.getShipX()+clientShip.getWidth()) {
+					if(clientData.getShipX()<currentRock.getWidth()+currentRock.getX()) {
+						if(currentRock.getY()+currentRock.getHeight()>=clientData.getShipY() && currentRock.getY()<=clientData.getShipY()+clientShip.getHeight()) {
+							clientData.hurt();
+							//sendClientHPToClient as info
+							//serverData.send(clientData.getHP())
+							rockIterator.remove();
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private void targetDetection() {
