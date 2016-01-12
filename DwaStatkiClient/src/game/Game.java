@@ -38,6 +38,7 @@ public class Game extends StateBasedGame{
 		this.getState(PLAY).init(gc, this);
 		this.getState(OPTIONS).init(gc, this);
 		this.enterState(MENU);
+		gc.setAlwaysRender(true);
 	}
 	
 	public static void main(String[] args) {
@@ -63,7 +64,7 @@ public class Game extends StateBasedGame{
 			e1.printStackTrace();
 		}
 		try {
-			gameClient.start("192.168.0.16", PORT);
+			gameClient.start(IPAddress, PORT);
 			System.out.println("Client started");
 			
 			Game game = new Game(GAMENAME, gameClient, clientData, serverData, rockData, toRemoveRocks); 

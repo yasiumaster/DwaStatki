@@ -34,6 +34,7 @@ public class Game extends StateBasedGame{
 		this.getState(MENU).init(gc, this);
 		this.getState(PLAY).init(gc, this);
 		this.enterState(MENU);
+		gc.setAlwaysRender(true);
 	}
 	
 	public static void main(String[] args) {
