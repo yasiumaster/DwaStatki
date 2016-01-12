@@ -8,3 +8,6 @@ DwaStatkiClient/client.log
 DwaStatki/error.log
 DwaStatki/server.log
 bin
+DwaStatki.iml
+DwaStatkiClient.iml
+.idea
