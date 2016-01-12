@@ -22,17 +22,23 @@ public class Game extends StateBasedGame{
 	public static final int PORT = 54555;
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
+	public static final int PAUSE = 3;
+	public static final int END = 4;
 	
 	public Game(String name, GameServer gameServer, ClientData clientData, ServerData serverData) {
 		super(name);
 		this.addState(new Menu(MENU));
 		this.addState(new Play(PLAY, gameServer, clientData, serverData));
+		this.addState(new Pause(PAUSE));
+		this.addState(new End(END));
 	}
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		this.getState(MENU).init(gc, this);
 		this.getState(PLAY).init(gc, this);
+		this.getState(PAUSE).init(gc, this);
+		this.getState(END).init(gc, this);
 		this.enterState(MENU);
 		gc.setAlwaysRender(true);
 	}
@@ -66,7 +72,7 @@ public class Game extends StateBasedGame{
 			gameContainer = new AppGameContainer(game);
 			int displayX = gameContainer.getScreenWidth();
 			int displayY = gameContainer.getScreenHeight();
-			//gameContainer.setDisplayMode(640, 480, false);
+			gameContainer.setDisplayMode(640, 480, false);
 			//gameContainer.setDisplayMode(displayX, displayY, true);
 			gameContainer.start();
 

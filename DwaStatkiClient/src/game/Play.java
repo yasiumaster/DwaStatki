@@ -119,8 +119,7 @@ public class Play extends BasicGameState {
         if (!GameHelper.getWinner().equals("NONE")) {
             timer = 0;
             g.drawString("WINNER IS: " + GameHelper.getWinner(), 100, 100);
-            if (timer > 3000)
-                sbg.enterState(0);
+            sbg.enterState(4);
         }
     }
 
@@ -288,7 +287,8 @@ public class Play extends BasicGameState {
                 showInfo = true;
         }
         if (input.isKeyPressed(Input.KEY_ESCAPE)) {
-            sbg.enterState(0);
+            //sbg.enterState(0);
+            sbg.enterState(3);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_P)) {
             boolean pauseState = !gc.isPaused();

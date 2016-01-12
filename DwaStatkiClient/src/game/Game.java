@@ -24,12 +24,16 @@ public class Game extends StateBasedGame {
     public static final int MENU = 0;
     public static final int PLAY = 1;
     public static final int OPTIONS = 2;
+    public static final int PAUSE = 3;
+	public static final int END = 4;
 
     public Game(String name, GameClient gameClient, ClientData clientData, ServerData serverData, List<RockData> rockData, List<Integer> toRemoveRocks) {
         super(name);
         this.addState(new Menu(MENU));
         this.addState(new Play(PLAY, gameClient, clientData, serverData, rockData, toRemoveRocks));
         this.addState(new Options(OPTIONS));
+		this.addState(new Pause(PAUSE));
+		this.addState(new End(END));
     }
 
     @Override
@@ -37,6 +41,8 @@ public class Game extends StateBasedGame {
         this.getState(MENU).init(gc, this);
         this.getState(PLAY).init(gc, this);
         this.getState(OPTIONS).init(gc, this);
+		this.getState(PAUSE).init(gc, this);
+		this.getState(END).init(gc, this);
         this.enterState(MENU);
         gc.setAlwaysRender(true);
     }
@@ -46,8 +52,8 @@ public class Game extends StateBasedGame {
         try {
             out = new PrintStream(new FileOutputStream("client.log"));
             err = new PrintStream(new FileOutputStream("error.log"));
-            System.setOut(out);
-            System.setErr(err);
+            //System.setOut(out);
+            //System.setErr(err);
         } catch (FileNotFoundException e2) {
             e2.printStackTrace();
         }

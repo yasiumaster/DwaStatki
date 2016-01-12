@@ -20,10 +20,10 @@ import control.ServerData;
 
 public class Play extends BasicGameState {
 
-    private final int POINTS_TO_WIN = 10;
+    private final int POINTS_TO_WIN = 1;
 
     private boolean showInfo = false;
-    private String winner = "NONE";
+    private static String winner = "NONE";
     private int timer = 0;
 
     int shooted = 0;
@@ -111,6 +111,10 @@ public class Play extends BasicGameState {
             g.drawImage(screenshot, 0, 0);
         }
     }
+    
+    public static String getWinner() {
+    	return winner;
+    }
 
     private void pause(GameContainer gc) {
         if (clientData.isGamePaused()) {
@@ -128,11 +132,9 @@ public class Play extends BasicGameState {
             winner = "SERVER";
         }
         if (!winner.equals("NONE")) {
-            timer = 0;
             g.drawString("WINNER IS: " + winner, 100, 100);
             gameServer.send(winner);
-            if (timer > 3000)
-                sbg.enterState(0);
+            sbg.enterState(4);
         }
     }
 
@@ -296,7 +298,8 @@ public class Play extends BasicGameState {
                 showInfo = true;
         }
         if (input.isKeyPressed(Input.KEY_ESCAPE)) {
-            sbg.enterState(0);
+            //sbg.enterState(0);
+            sbg.enterState(3);
         }
         if (gc.getInput().isKeyPressed(Input.KEY_P)) {
             boolean pauseState = !gc.isPaused();
