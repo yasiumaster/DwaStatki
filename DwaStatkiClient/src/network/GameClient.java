@@ -31,6 +31,12 @@ public class GameClient implements Sender{
 		client.sendTCP(data);
 		
 	}
+
+	public void send(int rockToRemoveId) {
+		System.out.println("Send: " + rockToRemoveId);
+		Packet.RockToRemove data = new Packet.RockToRemove(rockToRemoveId);
+		client.sendTCP(data);
+	}
 	
 	public void start(String ip, int port) throws Exception {
 		registerPackets();

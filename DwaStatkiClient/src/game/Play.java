@@ -84,7 +84,10 @@ public class Play extends BasicGameState{
 		chceckServerShoot();
 		renderShoots(g);
 		handleShoots();
-		
+
+		targetDetection();
+		targetCollisionDetection();
+
 		if(showInfo) {
 			g.drawString("CLIENT", 100, 10);
 			g.drawString("timer " + timer, 100, 20);
@@ -136,7 +139,68 @@ public class Play extends BasicGameState{
 			}
 		}
 	}
-	
+
+	private void targetCollisionDetection() {
+		for(Iterator<Rock> rockIterator = rocks.iterator(); rockIterator.hasNext();) {
+			Rock currentRock = rockIterator.next();
+			if(serverData.getShipX()+serverShip.getWidth()>=currentRock.getX()) {
+				if(currentRock.getX()<serverData.getShipX()+serverShip.getWidth()) {
+					if(serverData.getShipX()<currentRock.getWidth()+currentRock.getX()) {
+						if(currentRock.getY()+currentRock.getHeight()>=serverData.getShipY() && currentRock.getY()<=serverData.getShipY()+serverShip.getHeight()) {
+							serverData.hurt();
+							rockIterator.remove();
+						}
+					}
+				}
+			}
+
+			if(clientData.getShipX()+clientShip.getWidth()>=currentRock.getX()) {
+				if(currentRock.getX()<clientData.getShipX()+clientShip.getWidth()) {
+					if(clientData.getShipX()<currentRock.getWidth()+currentRock.getX()) {
+						if(currentRock.getY()+currentRock.getHeight()>=clientData.getShipY() && currentRock.getY()<=clientData.getShipY()+clientShip.getHeight()) {
+							clientData.hurt();
+							//sendClientHPToClient as info
+							//serverData.send(clientData.getHP())
+							rockIterator.remove();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void targetDetection() {
+		for(Iterator<Rock> rockIterator = rocks.iterator(); rockIterator.hasNext();) {
+			Rock currentRock = rockIterator.next();
+			for(Iterator<Bullet> bulletIterator = bullets.iterator(); bulletIterator.hasNext();) {
+				Bullet currentBullet = bulletIterator.next();
+				int currentShipY = 0;
+				String author = "NONE";
+				if(currentBullet.getAuthor().equals("CLIENT")) {
+					currentShipY = clientData.getShipY();
+					author = "CLIENT";
+				} else if(currentBullet.getAuthor().equals("SERVER")) {
+					currentShipY = serverData.getShipY();
+					author = "SERVER";
+				}
+				if(currentRock.getY()<currentShipY &&
+						currentBullet.getY()<=currentRock.getY()+currentRock.getHeight() &&
+						currentBullet.getX()+currentBullet.getWidth()<=currentRock.getX()+currentRock.getWidth() &&
+						currentBullet.getX()>=currentRock.getX()) {
+					System.out.println("Autor: " + author);
+					gameClient.send(currentRock.getId());
+					rockIterator.remove();
+					bulletIterator.remove();
+					if(author.equals("SERVER")) {
+						serverData.addPoints();
+					} else if (author.equals("CLIENT")) {
+						clientData.addPoints();
+					}
+				}
+			}
+		}
+	}
+
 	private void renderRocks(Graphics g) throws SlickException {	
 		for(Rock r : rocks) {
 			g.drawImage(r.getRock(), r.getX(), r.getY());
@@ -144,14 +208,14 @@ public class Play extends BasicGameState{
 	}
 	
 	public void newClientShoot() {
-		Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY());
+		Bullet b = new Bullet(bullet, clientData.getShipX()+45, clientData.getShipY(),"CLIENT");
 		bullets.add(b);
 	}
 	
 	public void chceckServerShoot() {
 		//TODO: czy to jest poprawnie?
 		if(serverData.getIfNewShootAndReset()) {
-			Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY());
+			Bullet b = new Bullet(bullet, serverData.getShipX()+45, serverData.getShipY(), "SERVER");
 			bullets.add(b);
 		}
 	}
