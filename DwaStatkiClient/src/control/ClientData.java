@@ -8,20 +8,20 @@ public class ClientData implements ShipAction{
 	private int points = 0;
 	private boolean newShoot = false;
 	private static ClientData clientData = null;
-	
+
 	private ClientData() {
 	}
-	
+
 	public static ClientData createClientData(int x, int y) {
 		if(clientData == null) {
 			clientData = new ClientData();
 			clientData.shipX = x;
 			clientData.shipY = y;
 		}
-		
+
 		return clientData;
 	}
-	
+
 	public boolean getIfNewShootAndReset() {
 		if(newShoot) {
 			System.out.println("New shoot from client!");
@@ -30,11 +30,11 @@ public class ClientData implements ShipAction{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void shoot() {
 		newShoot = true;
-		
+
 	}
 
 	@Override
@@ -45,20 +45,19 @@ public class ClientData implements ShipAction{
 
 	@Override
 	public void addPoints() {
-		// TODO Auto-generated method stub
-		
+		points++;
 	}
 
 	@Override
 	public void hurt() {
-		// TODO Auto-generated method stub
-		
+		if (hp > 0)
+			hp -= 10;
 	}
-	
+
 	public void incrementShipY(int i) {
 		shipY +=i;
 	}
-	
+
 	public void incrementShipX(int i) {
 		shipX +=i;
 	}
@@ -82,8 +81,12 @@ public class ClientData implements ShipAction{
 	public int getPoints() {
 		return points;
 	}
-	
+
 	public void setPoints(int i) {
 		this.points = i;
+	}
+
+	public int getHP() {
+		return hp;
 	}
 }

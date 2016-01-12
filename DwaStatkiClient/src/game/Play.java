@@ -80,6 +80,7 @@ public class Play extends BasicGameState{
 		
 		g.drawString("SERVER: " + serverData.getPoints(), 10, 20);
 		g.drawString("CLIENT: " + clientData.getPoints(), 10, 50);
+		g.drawString("HP: " + clientData.getHP(), 10, 80);
 		
 		chceckServerShoot();
 		renderShoots(g);
