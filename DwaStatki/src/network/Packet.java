@@ -101,4 +101,20 @@ public class Packet {
 			return winner;
 		}
 	}
+
+	public static class PauseState {
+		private boolean pauseState;
+
+		public PauseState() {
+			// TODO Auto-generated constructor stub
+		}
+
+		public PauseState(boolean pauseState) {
+			this.pauseState = pauseState;
+		}
+
+		public boolean isPauseState() {
+			return pauseState;
+		}
+	}
 }

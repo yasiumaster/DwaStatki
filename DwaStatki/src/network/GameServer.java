@@ -16,65 +16,72 @@ import com.esotericsoftware.minlog.Log;
 import control.ClientData;
 import control.ServerData;
 
-public class GameServer implements Sender{
-	
-	private Server server;
-	private NetworkListener listener;
-	
-	public GameServer(ClientData clientData) {
-		server = new Server();
-		listener = new NetworkListener(clientData);
-		server.addListener(listener);
-		Log.set(Log.LEVEL_DEBUG);
-	}
-	
-	public void start(int port) throws IOException {
-		registerPackets();
-		server.bind(port);
-		server.start();
-	}
-	
-	private void registerPackets() {
-		Kryo kryo = server.getKryo();
-		kryo.register(Packet.DefaultPacket.class);
-		kryo.register(Packet.Data.class);
-		kryo.register(Packet.RocksPacket.class);
-		kryo.register(java.util.ArrayList.class);
-		kryo.register(model.RockData.class);
-		kryo.register(Packet.RockToRemove.class);
-		kryo.register(Packet.GameData.class);
-	}
+public class GameServer implements Sender {
 
-	@Override
-	public void send(ServerData serverData) {
+    private Server server;
+    private NetworkListener listener;
+
+    public GameServer(ClientData clientData) {
+        server = new Server();
+        listener = new NetworkListener(clientData);
+        server.addListener(listener);
+        Log.set(Log.LEVEL_DEBUG);
+    }
+
+    public void start(int port) throws IOException {
+        registerPackets();
+        server.bind(port);
+        server.start();
+    }
+
+    private void registerPackets() {
+        Kryo kryo = server.getKryo();
+        kryo.register(Packet.DefaultPacket.class);
+        kryo.register(Packet.Data.class);
+        kryo.register(Packet.RocksPacket.class);
+        kryo.register(java.util.ArrayList.class);
+        kryo.register(model.RockData.class);
+        kryo.register(Packet.RockToRemove.class);
+        kryo.register(Packet.GameData.class);
+        kryo.register(Packet.PauseState.class);
+    }
+
+    @Override
+    public void send(ServerData serverData) {
 /*		int mouseX = gc.getInput().getMouseX();
-		int mouseY = gc.getInput().getMouseY();
+        int mouseY = gc.getInput().getMouseY();
 		Packet.Data data = new Packet.Data(mouseX, mouseY);*/
-		Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getPoints(), serverData.getIfNewShootAndReset());
-		server.sendToAllTCP(data);
-		//potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
-		
-	}
-	
-	public void send(int rockToRemoveId) {
-		System.out.println("Send: " + rockToRemoveId);
-		Packet.RockToRemove data = new Packet.RockToRemove(rockToRemoveId);
-		server.sendToAllTCP(data);
-		
-	}
+        Packet.Data data = new Packet.Data(serverData.getShipX(), serverData.getShipY(), serverData.getPoints(), serverData.getIfNewShootAndReset());
+        server.sendToAllTCP(data);
+        //potencjalnie jakos do zastapienia przez listner.getConnection().sendTCP();
 
-	public void send(List<RockData> rockData) {
+    }
 
-		Packet.RocksPacket data = new Packet.RocksPacket(rockData);
-		server.sendToAllTCP(data);
-		
-	}
-	
-	public void send(String winner) {
+    public void send(int rockToRemoveId) {
+        System.out.println("Send: " + rockToRemoveId);
+        Packet.RockToRemove data = new Packet.RockToRemove(rockToRemoveId);
+        server.sendToAllTCP(data);
 
-		Packet.GameData data = new Packet.GameData(winner);
-		server.sendToAllTCP(data);
-		
-	}
+    }
+
+    public void sendPauseState(boolean pauseState) {
+        Packet.PauseState data;
+        data = new Packet.PauseState(pauseState);
+        server.sendToAllTCP(data);
+    }
+
+    public void send(List<RockData> rockData) {
+
+        Packet.RocksPacket data = new Packet.RocksPacket(rockData);
+        server.sendToAllTCP(data);
+
+    }
+
+    public void send(String winner) {
+
+        Packet.GameData data = new Packet.GameData(winner);
+        server.sendToAllTCP(data);
+
+    }
 
 }

@@ -7,6 +7,7 @@ public class ServerData implements ShipAction {
     private int hp = 100;
     private int points = 0;
     private boolean newShoot = false;
+    private boolean isGamePaused = false;
     private static ServerData serverData = null;
 
     private ServerData() {
@@ -88,5 +89,13 @@ public class ServerData implements ShipAction {
 
     public int getHP() {
         return hp;
+    }
+
+    public void setGamePaused(boolean gamePaused) {
+        isGamePaused = gamePaused;
+    }
+
+    public boolean isGamePaused() {
+        return isGamePaused;
     }
 }
