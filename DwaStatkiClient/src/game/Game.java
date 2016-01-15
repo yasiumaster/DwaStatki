@@ -44,7 +44,7 @@ public class Game extends StateBasedGame {
         this.getState(OPTIONS).init(gc, this);
 		this.getState(PAUSE).init(gc, this);
 		this.getState(END).init(gc, this);
-        this.enterState(OPTIONS);
+        this.enterState(MENU);
         gc.setAlwaysRender(true);
     }
 
@@ -78,8 +78,8 @@ public class Game extends StateBasedGame {
             gameContainer = new AppGameContainer(game);
             int displayX = gameContainer.getScreenWidth();
             int displayY = gameContainer.getScreenHeight();
-            //gameContainer.setDisplayMode(640, 480, false);
-            gameContainer.setDisplayMode(displayX, displayY, true);
+            gameContainer.setDisplayMode(640, 480, false);
+            //gameContainer.setDisplayMode(displayX, displayY, true);
             gameContainer.start();
 
         } catch (SlickException e) {
