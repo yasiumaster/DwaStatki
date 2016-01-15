@@ -18,6 +18,10 @@ public class GameClient implements Sender {
         client.addListener(new NetworkListener(serverData, rockData, toRemoveRocks,clientData));
         Log.set(Log.LEVEL_DEBUG);
     }
+    
+    public boolean isConnected() {
+    	return client.isConnected();
+    }
 
     @Override
     public void send(ClientData clientData) {

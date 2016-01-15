@@ -74,7 +74,7 @@ public class Game extends StateBasedGame{
 			int displayY = gameContainer.getScreenHeight();
 			gameContainer.setDisplayMode(640, 480, false);
 			//gameContainer.setDisplayMode(displayX, displayY, true);
-			gameContainer.start();
+			//gameContainer.start();
 
 			
 		} catch(SlickException e) {

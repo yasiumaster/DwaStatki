@@ -21,6 +21,7 @@ public class Game extends StateBasedGame {
 
     public static final String GAMENAME = "2dGame";
     public static int PORT = 54555;
+    public static String ipAddress = "";
     public static final int MENU = 0;
     public static final int PLAY = 1;
     public static final int OPTIONS = 2;
@@ -31,7 +32,7 @@ public class Game extends StateBasedGame {
         super(name);
         this.addState(new Menu(MENU));
         this.addState(new Play(PLAY, gameClient, clientData, serverData, rockData, toRemoveRocks));
-        this.addState(new Options(OPTIONS));
+        this.addState(new Options(OPTIONS, gameClient));
 		this.addState(new Pause(PAUSE));
 		this.addState(new End(END));
     }
@@ -43,7 +44,7 @@ public class Game extends StateBasedGame {
         this.getState(OPTIONS).init(gc, this);
 		this.getState(PAUSE).init(gc, this);
 		this.getState(END).init(gc, this);
-        this.enterState(MENU);
+        this.enterState(OPTIONS);
         gc.setAlwaysRender(true);
     }
 
@@ -63,22 +64,22 @@ public class Game extends StateBasedGame {
         List<RockData> rockData = new ArrayList<>();
         List<Integer> toRemoveRocks = new ArrayList<>();
         GameClient gameClient = new GameClient(serverData, rockData, toRemoveRocks, clientData);
-        String IPAddress = null;
-        try {
+        /*String IPAddress = null;
+       try {
             IPAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e1) {
             e1.printStackTrace();
-        }
+        }*/
         try {
-            gameClient.start(IPAddress, PORT);
-            System.out.println("Client started");
+            //gameClient.start(IPAddress, PORT);
+            //System.out.println("Client started");
 
             Game game = new Game(GAMENAME, gameClient, clientData, serverData, rockData, toRemoveRocks);
             gameContainer = new AppGameContainer(game);
             int displayX = gameContainer.getScreenWidth();
             int displayY = gameContainer.getScreenHeight();
-            gameContainer.setDisplayMode(640, 480, false);
-            //gameContainer.setDisplayMode(displayX, displayY, true);
+            //gameContainer.setDisplayMode(640, 480, false);
+            gameContainer.setDisplayMode(displayX, displayY, true);
             gameContainer.start();
 
         } catch (SlickException e) {

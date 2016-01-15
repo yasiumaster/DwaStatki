@@ -20,7 +20,7 @@ import control.ServerData;
 
 public class Play extends BasicGameState {
 
-    private final int POINTS_TO_WIN = 1;
+    private final int POINTS_TO_WIN = 10;
 
     private boolean showInfo = false;
     private static String winner = "NONE";
