@@ -94,4 +94,8 @@ public class ClientData implements ShipAction{
 	public boolean isGamePaused() {
 		return isGamePaused;
 	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
 }
