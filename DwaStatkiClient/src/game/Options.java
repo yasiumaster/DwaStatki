@@ -2,6 +2,8 @@ package game;
 
 import java.awt.Font;
 
+import javax.swing.JTextField;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,7 +24,8 @@ public class Options extends BasicGameState {
 	private Image startButton;
 	private int startImgX;
 	private int startImgY;
-	private TextField textField;
+	private JTextField nameField; //pole na nazwê
+	boolean entered = false;
 
 	public Options(int state) {
 	}
@@ -34,6 +37,10 @@ public class Options extends BasicGameState {
 		startButton = new Image("res/start_button_small.png");
 		startImgX = arg0.getScreenWidth()/2 - startButton.getWidth()/2;
 		startImgY = arg0.getScreenHeight()/2 - startButton.getHeight()/2;
+		if(!entered) {
+		nameField = new JTextField();
+		}
+		entered = true;
 	}
 
 	@Override
@@ -43,7 +50,9 @@ public class Options extends BasicGameState {
 		arg2.drawImage(new Image("res/bg.png"), 0, 0);
 		//arg2.drawImage(startButton, startImgX, startImgY);
 		arg2.drawString("TUTAJ USTAWIANIE IP, PORTU", arg0.getScreenWidth()/2, arg0.getScreenHeight()/2);
+		
 		arg2.drawString("ENTER - Start", arg0.getScreenWidth()/2, 20 + arg0.getScreenHeight()/2);
+		
 		
 	}
 
