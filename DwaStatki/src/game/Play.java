@@ -20,7 +20,7 @@ import control.ServerData;
 
 public class Play extends BasicGameState {
 
-    private final int POINTS_TO_WIN = 10;
+    static int pointsToWin = 10;
 
     private boolean showInfo = false;
     private static String winner = "NONE";
@@ -125,10 +125,10 @@ public class Play extends BasicGameState {
     }
 
     private void winnerDetection(StateBasedGame sbg, Graphics g) {
-        if (clientData.getPoints() >= POINTS_TO_WIN || serverData.getHP() == 0) {
+        if (clientData.getPoints() >= pointsToWin || serverData.getHP() == 0) {
             winner = "CLIENT";
         }
-        if (serverData.getPoints() >= POINTS_TO_WIN || clientData.getHP() == 0) {
+        if (serverData.getPoints() >= pointsToWin || clientData.getHP() == 0) {
             winner = "SERVER";
         }
         if (!winner.equals("NONE")) {
@@ -207,7 +207,7 @@ public class Play extends BasicGameState {
         Rock r = new Rock(rock.copy(), x, y, id);
         int rotation = random.nextInt(359);
         r.getRock().rotate(rotation);
-        if (rocks.size() < 5) {
+        if (rocks.size() < 10) {
             rocks.add(r);
             rockData.add(new RockData(r.getX(), r.getY(), rotation, id));
             gameServer.send(rockData);

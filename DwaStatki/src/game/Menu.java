@@ -46,12 +46,12 @@ public class Menu extends BasicGameState{
 		int ypos = Mouse.getY();
 		
 		if(input.isKeyPressed(Input.KEY_ENTER)) {
-			arg1.enterState(1);
+			arg1.enterState(5);
 		}
 		if(xpos>startImgX && xpos<startImgX+startButton.getWidth() 
 				&& ypos>startImgY && ypos<startImgY+startButton.getHeight()) {
 			if(input.isMouseButtonDown(0)) {
-				arg1.enterState(1);
+				arg1.enterState(5);
 			}
 		}
 		if(input.isKeyPressed(Input.KEY_ESCAPE)) {
