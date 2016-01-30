@@ -57,6 +57,7 @@ public class Game extends StateBasedGame {
             //System.setErr(err);
         } catch (FileNotFoundException e2) {
             e2.printStackTrace();
+
         }
         AppGameContainer gameContainer;
         ClientData clientData = ClientData.createClientData(50, 150);

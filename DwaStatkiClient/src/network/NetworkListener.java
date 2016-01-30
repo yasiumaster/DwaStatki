@@ -51,7 +51,6 @@ public class NetworkListener extends Listener {
             }
         }
         if (obj instanceof Packet.RocksPacket) {
-            //TODO problem z przekazaniem otrzymanych danych do klasy Play i ich wygenerowania tam
             //System.out.println("RocketPacket recived");
             Packet.RocksPacket revicePacket = (Packet.RocksPacket) obj;
             List<RockData> revicedRockData = revicePacket.getRocksList();

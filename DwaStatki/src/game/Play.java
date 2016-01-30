@@ -236,7 +236,6 @@ public class Play extends BasicGameState {
     }
 
     public void chceckClientShoot() {
-        //TODO: czy to jest poprawnie?
         if (clientData.getIfNewShootAndReset()) {
             Bullet b = new Bullet(bullet, clientData.getShipX() + 45, clientData.getShipY(), "CLIENT");
             bullets.add(b);

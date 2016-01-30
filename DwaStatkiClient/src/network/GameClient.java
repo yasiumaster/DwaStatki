@@ -49,21 +49,6 @@ public class GameClient implements Sender {
         registerPackets();
         client.start();
         client.connect(5000, ip, port);
-        Thread.sleep(1000);
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                while (client.isConnected()) {
-
-                }
-
-                //Packet.DefaultPacket requestPacket = new Packet.DefaultPacket("Pytam");
-                //client.sendTCP(requestPacket);
-
-            }
-        }).start();
-
     }
 
     private void registerPackets() {
