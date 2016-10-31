@@ -1,5 +1,7 @@
 # DwaStatki
 
+![alt tag](http://oi64.tinypic.com/2u5du0g.jpg)
+
 Konfiguracja:
 
 1. Pobierz biblioteki: Slick2d, lwjgl, Kryonet. Umiesc je w /lib w obu projektach.
